@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign In</title>
+    <link rel="icon" type="image/png" href="static/favicon.png"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+    <style type="text/css">
+        body {
+            background-color: #EEEEEE;
+        }
+
+        body > .grid {
+            height: 100%;
+        }
+
+        .column {
+            max-width: 400px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="ui middle aligned center aligned grid">
+    <div class="column">
+        <div class="ui segment">
+            <h2 class="ui header">
+                <img src="static/pigeon.png">House of Cards
+            </h2>
+            <p>Sorry, you must login to continue.</p>
+            <div class="ui divider"></div>
+            <a href="{{ login_url }}" class="ui secondary basic button">
+                <i class="google icon"></i>Login
+            </a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

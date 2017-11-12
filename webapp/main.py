@@ -14,12 +14,35 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-import webapp2
+
+from google.appengine.api import users
+
+import config.config as cfg
+
+from handlers.LoginHandler import *
+from handlers.ExplorePage import *
+from handlers.StudyPage import *
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
-        self.response.write('Hello world!')
+
+        template_value = {}
+
+        user = users.get_current_user()
+        if user:
+            template_value['pigeon'] = user.email()
+            template_value['logout_url'] = cfg.LOG_OUT_URL
+            template_value['sign'] = True
+        else:
+            template_value['login_url'] = cfg.LOG_IN_URL
+            template_value['sign'] = False
+
+        template = cfg.JINJA_ENVIRONMENT.get_template("index.html")
+        self.response.write(template.render(template_value))
 
 app = webapp2.WSGIApplication([
-    ('/', MainHandler)
+    ('/', MainHandler),
+    ('/login', LoginPage),
+    ('/explore', ExplorePage),
+    ('/study', StudyPage)
 ], debug=True)

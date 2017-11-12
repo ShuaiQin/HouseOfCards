@@ -1,0 +1,10 @@
+{% include 'header.html' %}
+
+{% if sign %}
+    {% include 'pigeon.html' %}
+    <!--TODO: maybe feed.html></-->
+{% else %}
+    {% include 'intro.html' %}
+{% endif %}
+
+{% include 'footer.html' %}
