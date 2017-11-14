@@ -16,12 +16,12 @@
 #
 
 """
-Get user scheduling input and make a plan for user
+1. Get user scheduling input and make a plan for user
 (the input could be: "Complete within XX days", "Complete XX words a day")
 
 (this plan probably needs consider the Ebbinghaus Forgetting Curve)
 
-User daily progress -> compare with planned progress
+2. User daily progress -> compare with planned progress
 (daily progress includes: known words, unknown words)
 
 if exceed
@@ -31,13 +31,13 @@ if behind
 
 Another Function:
 
-1. Show Known Words and Unknown Words (How many unknown words left)
+3. Show Known Words and Unknown Words (How many unknown words left)
 
-2. Show How many days left to complete
+4. Show How many days left to complete
 
-3. Show progress bar
+5. Show progress bar
 
-4. Generate a quiz (for all repo)
+[Done] 6. Generate a quiz (for all repo)
 
 """
 
@@ -72,8 +72,9 @@ class GetMultipleQuizHandler(webapp2.RequestHandler):
 
         # get a list of all values for future convenience
         list_of_all_values = []
-        for key in list_of_all_cards:
-            list_of_all_values.append(list_of_all_cards[key])
+        for single_card in list_of_all_cards:
+            for key in single_card:
+                list_of_all_values.append(single_card[key])
 
         # get a random list of cards with total number is number_of_quiz
         list_of_random_cards = random.sample(list_of_all_cards, number_of_quiz)
@@ -100,6 +101,7 @@ class GetMultipleQuizHandler(webapp2.RequestHandler):
                     if list_of_all_random_values[count] != card[key]:
                         single_question[key].append(list_of_all_random_values[count])
                     count = count + 1
+                single_question[key] = random.sample(single_question[key], len(single_question[key]))
             list_of_question.append(single_question)
 
         return_info = {
@@ -111,6 +113,58 @@ class GetMultipleQuizHandler(webapp2.RequestHandler):
 
 
 class GetTrueFalseQuizHandler(webapp2.RequestHandler):
+    """
+    This handler is for generating a True/False quiz
+    :input_1: house_id (repo id)
+    :input_2: number_of_quiz (how many quiz does user want, check legal at web front end)
+    :return: json output. two lists:
+             1. (correct answer) [{key: value}, ..., {key: value}]
+             2. (True/False choices) [{key: value}, ..., {key: value}], value may be true or false (~50%)
+             the true/false probability is ~50% when data is quite large
+
+    """
+    def get(self):
+        number_of_quiz = self.request.get('number_of_quiz')
+        house_id = self.request.get('house_id')
+
+        # TODO: get_all_cards needs to be implemented (Database Operation)
+        # all_cards is a list of dictionary
+        # TODO: [{Key: Value},{Key: Value},{Key: Value},{Key: Value},....,{Key: Value}]
+        list_of_all_cards = get_all_cards(house_id)
+
+        # get a list of all values for future convenience
+        list_of_all_values = []
+        for single_card in list_of_all_cards:
+            for key in single_card:
+                list_of_all_values.append(single_card[key])
+
+        # get a random list of cards with total number is number_of_quiz
+        list_of_random_cards = random.sample(list_of_all_cards, number_of_quiz)
+
+        # construct the list of answer
+        list_of_answer = list(list_of_random_cards)
+
+        list_of_question = []
+        for single_card in list_of_random_cards:
+            # construct a single question with only one true or false answer
+            single_question = {}
+            # this list should have only two values, true value and false value
+            list_of_possible_answer = []
+            for key in single_card:
+                list_of_possible_answer.append(single_card[key])
+                list_of_possible_answer.append(random.choice(list_of_all_values))
+                single_question[key] = str(random.choice(list_of_possible_answer))
+            list_of_question.append(single_question)
+
+        return_info = {
+            'list_of_question': list_of_question,
+            'list_of_answer': list_of_answer
+        }
+        self.response.content_type = 'text/html'
+        self.response.write(json.dumps(return_info))
+
+
+class MakeScheduleHandler(webapp2.RequestHandler):
     def get(self):
         pass
 
@@ -118,5 +172,6 @@ class GetTrueFalseQuizHandler(webapp2.RequestHandler):
 service = webapp2.WSGIApplication([
     ('/', MainHandler),
     ('/getmultiplequiz', GetMultipleQuizHandler),
-    ('/gettruefalsequiz', GetTrueFalseQuizHandler)
+    ('/gettruefalsequiz', GetTrueFalseQuizHandler),
+    ('/makeschedule', MakeScheduleHandler)
 ], debug=True)
