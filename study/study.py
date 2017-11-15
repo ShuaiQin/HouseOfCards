@@ -16,8 +16,9 @@
 #
 
 """
-1. Get user scheduling input and make a plan for user
+[Done] 1. Get user scheduling input and make a plan for user
 (the input could be: "Complete within XX days", "Complete XX words a day")
+(Complete XX words a day is much more simple and realizable)
 
 (this plan probably needs consider the Ebbinghaus Forgetting Curve)
 
@@ -44,6 +45,7 @@ Another Function:
 import webapp2
 import json
 import random
+import math
 
 
 class MainHandler(webapp2.RequestHandler):
@@ -165,8 +167,51 @@ class GetTrueFalseQuizHandler(webapp2.RequestHandler):
 
 
 class MakeScheduleHandler(webapp2.RequestHandler):
+    """
+    This handler is for generating a personal schedule based on user input and Ebbinghaus curve
+    :input_1: house_id (repo id)
+    :input_2: number_of_key_per_day (how many keys does user want to learn per day)
+    :return: json output. one lists:
+             1. list_of_schedule: [[new1, review1], [new2, review1, review2], ..., [review]]
+             will consider how to store it in database and get back to front-end
+
+    """
     def get(self):
-        pass
+        number_of_key_per_day = self.request.get('number_of_key_per_day')
+        house_id = self.request.get('house_id')
+
+        # TODO: [{Key: Value},{Key: Value},{Key: Value},{Key: Value},....,{Key: Value}]
+        list_of_all_cards = get_all_cards(house_id)
+
+        # get the total card length
+        total_cards = len(list_of_all_cards)
+
+        # calculate the supposed day needed, total number of review blocks
+        supposed_day = int(math.ceil(float(total_cards) / float(number_of_key_per_day)))
+        # calculate the total day needed based on the Ebbinghaus Curve
+        total_day = int(supposed_day + math.pow(2, math.floor(math.log(supposed_day, 2)))) - 1
+        # increase factor is to calculate how many extra days needed for review
+        increase_factor = int(math.floor(math.log(supposed_day, 2)))
+
+        # construct a schedule list
+        list_of_schedule = [None] * total_day
+        for i in range(0, len(list_of_schedule)):
+            list_of_schedule[i] = []
+
+        # study the new material at the beginning of a day
+        for i in range(0, supposed_day):
+            list_of_schedule[i].append("new" + str(i))
+
+        # review the old material based on the general memory forgotten curve
+        for i in range(0, supposed_day):
+            for j in range(0, increase_factor + 1):
+                list_of_schedule[int(math.pow(2, j) - 1 + i)].append("review" + str(i))
+
+        return_info = {
+            'list_of_schedule': list_of_schedule,
+        }
+        self.response.content_type = 'text/html'
+        self.response.write(json.dumps(return_info))
 
 
 service = webapp2.WSGIApplication([
