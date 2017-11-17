@@ -28,13 +28,13 @@ class PullRequest(ndb.Model):
     card_key = ndb.KeyProperty(kind="Card")
     new_key = ndb.StringProperty()
     new_value = ndb.StringProperty()
-    mode = ndb.StringProperty()
+    mode = ndb.StringProperty()  # query,update,insert,delete
 
 class Issue(ndb.Model):    #commont for a card
     pigeon_key = ndb.KeyProperty(kind="Pigeon")
     card_key = ndb.KeyProperty(kind="Card")
     comment = ndb.StringProperty()
-    date = ndb.DateTimeProperty()
+    date = ndb.DateTimeProperty(auto_now_add=True)
 
 class Post(ndb.Model):   #comment for a house
     pigeon_key = ndb.KeyProperty(kind="Pigeon")
