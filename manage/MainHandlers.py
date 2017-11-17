@@ -15,6 +15,8 @@
 # limitations under the License.
 #
 import webapp2
+import model.ops
+import json
 from manage.ManageHouseServiceHandlers import CreateHouseServiceHandler
 from manage.ManageHouseServiceHandlers import RemoveHouseServiceHandler
 from manage.ManageCardServiceHandlers import AddCardServiceHandler
@@ -31,6 +33,8 @@ from manage.IssuesServiceHandlers import ResolveIssueServiceHandler
 from manage.PostServiceHandlers import AddNewPostServiceHandler
 from manage.TrendingServiceHandlers import GetTrendingSubServiceHandler
 from manage.TrendingServiceHandlers import GetTrendingViewServiceHandler
+from manage.ViewHouseServiceHandler import ViewAllHousesServiceHandler
+from manage.ViewHouseServiceHandler import ViewSingleHouseServiceHandler
 
 
 class MainHandler(webapp2.RequestHandler):
@@ -40,12 +44,28 @@ class MainHandler(webapp2.RequestHandler):
 
 class ManageProfileServiceHandler(webapp2.RequestHandler):
     def get(self):
-        pass
+        user_id = self.request.get('user_id')
+        if not ops.pigeon_exists(user_id):  # if no such user, return two empty lists
+            ops.create_pigeon(user_id)
+            owned_house_list = []
+            subed_house_list = []
+        else:
+            owned_house_list = ops.get_self_house(user_id)
+            subed_house_list = ops.get_sub_house(user_id)
+        return_info = {
+            'owned_house_list': owned_house_list,
+            'subed_house_list': subed_house_list
+        }
+        self.response.content_type = 'text/html'
+        self.response.write(json.dumps(return_info))
+
 
 
 service = webapp2.WSGIApplication([
     ('/', MainHandler),
     ('/service-manageprofile',ManageProfileServiceHandler),
+    ('/service-viewallhouses',ViewAllHousesServiceHandler),
+    ('/service-viewsinglehouse',ViewSingleHouseServiceHandler),
     ('/service-createhouse',CreateHouseServiceHandler),
     ('/service-removehouse',RemoveHouseServiceHandler),
     ('/service-addcard',AddCardServiceHandler),
