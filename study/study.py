@@ -32,11 +32,11 @@ if behind
 
 Another Function:
 
-3. Show Known Words and Unknown Words (How many unknown words left)
+[Done] 3. Show Known Words and Unknown Words (How many unknown words left)
 
-4. Show How many days left to complete
+[Modification] 4. Show How many days left to complete
 
-5. Show progress bar
+[Done] 5. Show progress bar
 
 [Done] 6. Generate a quiz (for all repo)
 
@@ -46,6 +46,7 @@ import webapp2
 import json
 import random
 import math
+from model import ops
 
 
 class MainHandler(webapp2.RequestHandler):
@@ -62,15 +63,13 @@ class GetMultipleQuizHandler(webapp2.RequestHandler):
              1. (correct answer) [{key: value}, ..., {key: value}]
              2. (multiple choices) [{key: [value, value, value, value]}, ..., {key: [value, value, value, value]}]
              the default multiple choices are 4, if number of cards < 4, multiple choices are the number
-
     """
     def get(self):
         number_of_quiz = self.request.get('number_of_quiz')
         house_id = self.request.get('house_id')
 
-        # TODO: get_all_cards needs to be implemented (Database Operation)
         # all_cards is a list of dictionary
-        list_of_all_cards = get_all_cards(house_id)
+        list_of_all_cards = ops.get_all_cards(house_id)
 
         # get a list of all values for future convenience
         list_of_all_values = []
@@ -123,16 +122,13 @@ class GetTrueFalseQuizHandler(webapp2.RequestHandler):
              1. (correct answer) [{key: value}, ..., {key: value}]
              2. (True/False choices) [{key: value}, ..., {key: value}], value may be true or false (~50%)
              the true/false probability is ~50% when data is quite large
-
     """
     def get(self):
         number_of_quiz = self.request.get('number_of_quiz')
         house_id = self.request.get('house_id')
 
-        # TODO: get_all_cards needs to be implemented (Database Operation)
         # all_cards is a list of dictionary
-        # TODO: [{Key: Value},{Key: Value},{Key: Value},{Key: Value},....,{Key: Value}]
-        list_of_all_cards = get_all_cards(house_id)
+        list_of_all_cards = ops.get_all_cards(house_id)
 
         # get a list of all values for future convenience
         list_of_all_values = []
@@ -174,14 +170,13 @@ class MakeScheduleHandler(webapp2.RequestHandler):
     :return: json output. one lists:
              1. list_of_schedule: [[new1, review1], [new2, review1, review2], ..., [review]]
              will consider how to store it in database and get back to front-end
-
     """
     def get(self):
+        pigeon_id = self.request.get('pigeon_id')
         number_of_key_per_day = self.request.get('number_of_key_per_day')
         house_id = self.request.get('house_id')
 
-        # TODO: [{Key: Value},{Key: Value},{Key: Value},{Key: Value},....,{Key: Value}]
-        list_of_all_cards = get_all_cards(house_id)
+        list_of_all_cards = ops.get_all_cards(house_id)
 
         # get the total card length
         total_cards = len(list_of_all_cards)
@@ -207,9 +202,153 @@ class MakeScheduleHandler(webapp2.RequestHandler):
             for j in range(0, increase_factor + 1):
                 list_of_schedule[int(math.pow(2, j) - 1 + i)].append("review" + str(i))
 
+        # for test
         return_info = {
-            'list_of_schedule': list_of_schedule,
+            'list_of_schedule': list_of_schedule
         }
+        self.response.content_type = 'text/html'
+        self.response.write(json.dumps(return_info))
+
+
+class ShowProgressHandler(webapp2.RequestHandler):
+    """
+    This handler is for showing the progress, need to be estimated by equation
+    :input_1: house_id (repo id)
+    :input_2: pigeon_id
+    :return: json output. two integers
+             1. num_of_remain_unlearn_key
+             2. approx_day_left (estimation)
+    """
+    def get(self):
+        pigeon_id = self.request.get('pigeon_id')
+        house_id = self.request.get('house_id')
+
+        list_of_familiar_factor = ops.get_list_of_familiar_factor(pigeon_id, house_id)
+        number_of_key_per_day = ops.get_num_per_day(pigeon_id, house_id)
+
+        # find out how many unlearn words (familiar_factor == 0)
+        count = 0
+        for i in range(len(list_of_familiar_factor)):
+            if list_of_familiar_factor[i] == 0:
+                count = count + 1
+
+        # TODO: need to be estimated well
+        # calculate how many days left to finish all unlearn words (basic)
+        approx_day_left = math.ceil(count / number_of_key_per_day)
+
+        return_info = {
+            'num_of_remain_unlearn_key': count,
+            'approx_day_left': approx_day_left
+        }
+        self.response.content_type = 'text/html'
+        self.response.write(json.dumps(return_info))
+
+
+class GetTodayTaskHandler(webapp2.RequestHandler):
+    """
+        This handler is for returning the words need to be learned and reviewed based on Ebbinghaus equation
+        :input_1: house_id (repo id)
+        :input_2: pigeon_id
+        :return: json output. one list
+                 1. [{Key, Value}, {Key, Value},...]
+    """
+    def get(self):
+        # get the pigeon id and the house the pigeon want to learn
+        pigeon_id = self.request.get('pigeon_id')
+        house_id = self.request.get('house_id')
+        # the number of key per day the pigeon want to learn is pre-set by user
+        number_of_key_per_day = ops.get_num_per_day(pigeon_id, house_id)
+        # get all cards for generation of feed
+        list_of_all_cards = ops.get_all_cards(house_id)
+        # each pigeon has a special familiar factor to each card, initial is 0
+        list_of_familiar_factor = ops.get_list_of_familiar_factor(pigeon_id, house_id)
+        # number of times (factor) the pigeon has learned this card
+        list_of_learn_factor = ops.get_list_of_learn_time(pigeon_id, house_id)
+        # the total number of the cards
+        number_of_cards = len(list_of_all_cards)
+
+        # list of feed stores the index rather than content
+        list_of_feed = []
+        # limit by number of new words the pigeon want to learn
+        count_of_new = 0
+        # assume review is equal to the new
+        count_of_review = 0
+
+        for i in range(number_of_cards):
+            # TODO: which should be cron job set by 1 day (modify later)
+            # the familiar factor is decreased due to Ebbinghaus forgetting curve equation
+            list_of_familiar_factor[i] = list_of_familiar_factor[i] * math.exp(-1 / list_of_learn_factor[i])
+            # fetch the words need review first, the number is limited by number of key per day
+            if 0.0 < list_of_familiar_factor[i] < 50.0 and count_of_review < number_of_key_per_day:
+                list_of_feed.append(i)
+                # we assume the user 100% learn that
+                # set the familiar factor to 100 (know it very well)
+                list_of_familiar_factor[i] = 100.0
+                count_of_review = count_of_review + 1
+                # learn factor gets increased due to multiple time learning
+                list_of_learn_factor[i] = list_of_learn_factor[i] * 2.0
+            # fetch the new words
+            elif list_of_familiar_factor[i] == 0.0 and count_of_new < number_of_key_per_day:
+                list_of_feed.append(i)
+                list_of_familiar_factor[i] = 100.0
+                count_of_new = count_of_new + 1
+                # learn factor gets increased, the more time you review the less chance you forget it
+                list_of_learn_factor[i] = list_of_learn_factor[i] * 2.0
+
+        # store the familiar factor and learn factor in db
+        ops.set_familiar_factor(pigeon_id, house_id, list_of_familiar_factor)
+        ops.set_list_of_learn_factor(pigeon_id, house_id, list_of_learn_factor)
+
+        # construct a list of feed cards
+        list_of_feed_cards = []
+        for index in list_of_feed:
+            # [{Key: Value}, {Key: Value}, ..., {Key: Value}]
+            list_of_feed_cards.append(list_of_all_cards[index])
+
+        # [{Key: Value}, {Key: Value}, ..., {Key: Value}]
+        return_info = {
+            'list_of_feed_cards': list_of_feed_cards
+        }
+
+        self.response.content_type = 'text/html'
+        self.response.write(json.dumps(return_info))
+
+
+class SetScheduleHandler(webapp2.RequestHandler):
+    def get(self):
+        pigeon_id = self.request.get('pigeon_id')
+        house_id = self.request.get('house_id')
+        num_per_day = self.request.get('num_per_day')
+        ops.set_schedule(pigeon_id, house_id, num_per_day)
+
+
+class CheckScheduleHandler(webapp2.RequestHandler):
+    """
+        This handler is for checking if the progress is end
+        :input_1: house_id (repo id)
+        :input_2: pigeon_id
+        :return: json output. Boolean True / False
+    """
+    def get(self):
+        pigeon_id = self.request.get('pigeon_id')
+        house_id = self.request.get('house_id')
+        list_of_familiar_factor = ops.get_list_of_familiar_factor(pigeon_id, house_id)
+
+        # set the threshhold to 50.0, maybe change later
+        count = 0
+        for i in range(len(list_of_familiar_factor)):
+            if list_of_familiar_factor[i] < 50.0:
+                count = count + 1
+
+        if count != 0:
+            is_finished = False
+        else:
+            is_finished = True
+
+        return_info = {
+            'is_finished': is_finished
+        }
+
         self.response.content_type = 'text/html'
         self.response.write(json.dumps(return_info))
 
@@ -218,5 +357,9 @@ service = webapp2.WSGIApplication([
     ('/', MainHandler),
     ('/getmultiplequiz', GetMultipleQuizHandler),
     ('/gettruefalsequiz', GetTrueFalseQuizHandler),
-    ('/makeschedule', MakeScheduleHandler)
+    ('/makeschedule', MakeScheduleHandler),
+    ('/showprogress', ShowProgressHandler),
+    ('/gettodaytask', GetTodayTaskHandler),
+    ('/setshedule', SetScheduleHandler),
+    ('/checkschedulefinish', CheckScheduleHandler)
 ], debug=True)
