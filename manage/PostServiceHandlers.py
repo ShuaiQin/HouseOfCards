@@ -4,4 +4,9 @@ import webapp2
 
 class AddNewPostServiceHandler(webapp2.RequestHandler):
     def get(self):
-        pass
+        user_id = self.request.get("user_id")
+        house_name = self.request.get("house_name")
+        content = self.request.get("content")
+        ops.add_post(house_name, user_id, content)
+
+
