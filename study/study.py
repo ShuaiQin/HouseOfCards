@@ -246,11 +246,11 @@ class ShowProgressHandler(webapp2.RequestHandler):
 
 class GetTodayTaskHandler(webapp2.RequestHandler):
     """
-        This handler is for returning the words need to be learned and reviewed based on Ebbinghaus equation
-        :input_1: house_id (repo id)
-        :input_2: pigeon_id
-        :return: json output. one list
-                 1. [{Key, Value}, {Key, Value},...]
+    This handler is for returning the words need to be learned and reviewed based on Ebbinghaus equation
+    :input_1: house_id (repo id)
+    :input_2: pigeon_id
+    :return: json output. one list
+             1. [{Key, Value}, {Key, Value},...]
     """
     def get(self):
         # get the pigeon id and the house the pigeon want to learn
@@ -324,10 +324,10 @@ class SetScheduleHandler(webapp2.RequestHandler):
 
 class CheckScheduleHandler(webapp2.RequestHandler):
     """
-        This handler is for checking if the progress is end
-        :input_1: house_id (repo id)
-        :input_2: pigeon_id
-        :return: json output. Boolean True / False
+    This handler is for checking if the progress is end
+    :input_1: house_id (repo id)
+    :input_2: pigeon_id
+    :return: json output. Boolean True / False
     """
     def get(self):
         pigeon_id = self.request.get('pigeon_id')
