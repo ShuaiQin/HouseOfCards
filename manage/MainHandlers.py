@@ -33,6 +33,7 @@ from manage.IssuesServiceHandlers import ResolveIssueServiceHandler
 from manage.PostServiceHandlers import AddNewPostServiceHandler
 from manage.TrendingServiceHandlers import GetTrendingSubServiceHandler
 from manage.TrendingServiceHandlers import GetTrendingViewServiceHandler
+from manage.TrendingServiceHandlers import GetCategoryServiceHandler
 from manage.ViewHouseServiceHandler import ViewAllHousesServiceHandler
 from manage.ViewHouseServiceHandler import ViewSingleHouseServiceHandler
 
@@ -81,5 +82,6 @@ service = webapp2.WSGIApplication([
     ('/service-resolveissue',ResolveIssueServiceHandler),
     ('/service-addpost',AddNewPostServiceHandler),
     ('/service-trendingsub',GetTrendingSubServiceHandler),
-    ('/service-trendingview',GetTrendingViewServiceHandler)
+    ('/service-trendingview',GetTrendingViewServiceHandler),
+    ('/service-category',GetCategoryServiceHandler)
 ], debug=True)
