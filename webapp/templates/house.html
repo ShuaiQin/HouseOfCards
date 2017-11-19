@@ -1,10 +1,63 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>House</title>
-</head>
-<body>
+{% include 'header.html' %}
 
-</body>
-</html>
+<script>
+    $(document).ready(function () {
+        $('.demo.menu .item')
+            .tab({
+                history: false
+            })
+        ;
+    });
+</script>
+
+<div class="ui two column centered grid">
+    <div class="row"></div>
+    <div class="row">
+        <div class="three wide column">
+            <h1 class="header">
+                {{ house }}
+            </h1>
+        </div>
+        <div class="ten wide column">
+        </div>
+    </div>
+    <div class="row">
+        <div class="three wide column">
+        </div>
+        <div class="ten wide column">
+            <div class="ui pointing secondary demo menu">
+                <a class="item active" data-tab="card">Card</a>
+                <a class="item" data-tab="issue">Issue</a>
+                <a class="item" data-tab="pr">Pull Request</a>
+                <a class="item" data-tab="post">Comments</a>
+                <a class="item" data-tab="insight">Insight</a>
+                <a class="item" data-tab="setting">Setting</a>
+            </div>
+        </div>
+    </div>
+    <div class="three wide column">
+        {% include 'overview.html' %}
+    </div>
+    <div class="ten wide column">
+        <div class="ui tab active" data-tab="card">
+            {% include 'cards.html' %}
+        </div>
+        <div class="ui tab" data-tab="issue">
+            {% include 'issue.html' %}
+        </div>
+        <div class="ui tab" data-tab="pr">
+            {% include 'pr.html' %}
+        </div>
+        <div class="ui tab" data-tab="post">
+            {% include 'post.html' %}
+        </div>
+        <div class="ui tab" data-tab="insight">
+            {% include 'insight.html' %}
+        </div>
+        <div class="ui tab" data-tab="setting">
+            {% include 'setting.html' %}
+        </div>
+    </div>
+    <div class="row"></div>
+</div>　
+{% include 'footer.html' %}
