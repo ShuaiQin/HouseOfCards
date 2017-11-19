@@ -19,9 +19,11 @@ from google.appengine.api import users
 
 import config.config as cfg
 
-from handlers.LoginHandler import *
+from handlers.LoginPage import *
 from handlers.ExplorePage import *
 from handlers.StudyPage import *
+from handlers.PigeonPage import *
+from handlers.HousePage import *
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
@@ -30,7 +32,7 @@ class MainHandler(webapp2.RequestHandler):
 
         user = users.get_current_user()
         if user:
-            template_value['pigeon'] = user.email()
+            template_value['myself'] = user.email()
             template_value['logout_url'] = cfg.LOG_OUT_URL
             template_value['sign'] = True
         else:
@@ -44,5 +46,7 @@ app = webapp2.WSGIApplication([
     ('/', MainHandler),
     ('/login', LoginPage),
     ('/explore', ExplorePage),
-    ('/study', StudyPage)
+    ('/study', StudyPage),
+    ('/pigeon/(\w+)', PigeonPage, 'id'),
+    ('/house/(\w+)', HousePage, 'name')
 ], debug=True)
