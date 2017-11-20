@@ -1,15 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Pigeon</title>
-</head>
-<body>
+{% include 'header.html' %}
+
 <div class="ui two column centered grid">
     <div class="row">
         <div class="three wide column">
             <h2 class="header">
-                My House
+                {{ pigeon }}'s House
             </h2>
             <div class="ui fluid card">
                 <div class="image">
@@ -24,5 +19,5 @@
         </div>
     </div>
 </div>
-</body>
-</html>
+
+{% include 'footer.html' %}

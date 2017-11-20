@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>HouseOfCards</title>
-    <link rel="icon" type="image/png" href="static/favicon.png"/>
+    <link rel="icon" type="image/png" href="/static/favicon.png"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
 
-    <script src="static/js/header.js"></script>
+    <script src="/static/js/header.js"></script>
 
 </head>
 <body>
 <div class="ui menu">
     <a class="header item" href="/">
-        <img src="static/pigeon.png" style="padding-right: 5px">House Of Cards
+        <img src="/static/pigeon.png" style="padding-right: 5px">House Of Cards
     </a>
     <div class="item">
         <div class="ui icon input">
@@ -29,10 +29,10 @@
         <a class="item nav-item">Mobile App</a>
         {% if sign %}
         <div class="ui dropdown item">
-            Login as <b style="padding-left: 5px">{{ pigeon }}</b>
+            Login as <b style="padding-left: 5px">{{ myself }}</b>
             <i class="dropdown icon"></i>
             <div class="menu">
-                <div class="item">Your Profile</div>
+                <a class="item" href="/pigeon/TestMyAccount">Your Profile</a>
                 <div class="item">Your Progress</div>
                 <div class="divider"></div>
                 <div class="item">Premium</div>
