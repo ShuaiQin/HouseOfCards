@@ -1,5 +1,6 @@
 from google.appengine.ext import ndb
 
+
 class Pigeon(ndb.Model):     # key is user id
     pigeon_id = ndb.StringProperty()  # user's id
 
@@ -7,6 +8,8 @@ class House(ndb.Model):      # key is name of house
     cover_url = ndb.StringProperty()
     name = ndb.StringProperty()
     category = ndb.StringProperty()
+    view = ndb.IntegerProperty()
+    num_of_subed = ndb.IntegerProperty()
 
 class Card(ndb.Model):      # key is name of card
     key = ndb.StringProperty()
@@ -15,7 +18,7 @@ class Card(ndb.Model):      # key is name of card
 class Subscription(ndb.Model):
     pigeon_key = ndb.KeyProperty(kind="Pigeon")
     house_key = ndb.KeyProperty(kind="House")
-    # 日程
+    num_per_day = ndb.IntegerProperty()
 
 class Progress(ndb.Model):
     pigeon_key = ndb.KeyProperty(kind="Pigeon")
