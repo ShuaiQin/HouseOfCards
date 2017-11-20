@@ -52,7 +52,13 @@ def get_all_cards(house_name):
 
 def get_self_house(pigeon_id):
     house_list = House.query(ancestor=ndb.Key(Pigeon,pigeon_id)).fetch()
-    return house_list
+    return map(lambda s: {"house_name": s.name, "cover_url": s.cover_url,
+                          "category": s.category , "view": s.view,
+                          "num_of_subed": s.num_of_subed},
+               house_list)
+
+
+
 
 def create_subscription(pigeon_id, house_name,num_per_day):
     pigeon_key = ndb.Key(Pigeon,pigeon_id)
@@ -74,11 +80,17 @@ def delete_subscription(pigeon_id, house_name):
 def get_sub_house(pigeon_id):
     pigeon_key = ndb.Key(Pigeon, pigeon_id)
     house_list = House.query( pigeon_key=pigeon_key ).fetch()
-    return house_list
+    return map(lambda s: {"house_name": s.name, "cover_url": s.cover_url,
+                          "category": s.category , "view": s.view,
+                          "num_of_subed": s.num_of_subed},
+               house_list)
 
 def get_all_house():
     house_list = House.query().fetch()
-    return house_list
+    return map(lambda s: {"house_name": s.name, "cover_url": s.cover_url,
+                          "category": s.category , "view": s.view,
+                          "num_of_subed": s.num_of_subed},
+               house_list)
 
 def get_single_house(house_name):
     house_list = House.query(name = house_name).fetch()
@@ -156,5 +168,11 @@ def edit_card_content (house_name, card_key, new_card_content):
 
     card.value = new_card_content
     card.put()
+    return
+
+# def send_pull_request(user_id, house_name, mode, card_key, new_key, new_value)
+
+
+
 
 
