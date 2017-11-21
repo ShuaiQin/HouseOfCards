@@ -32,9 +32,12 @@ class PullRequest(ndb.Model):
     new_key = ndb.StringProperty()
     new_value = ndb.StringProperty()
     mode = ndb.StringProperty()  # query,update,insert,delete
+    date = ndb.DateTimeProperty(auto_now_add=True)
+
 
 class Issue(ndb.Model):    #commont for a card
     pigeon_key = ndb.KeyProperty(kind="Pigeon")
+    house_key = ndb.KeyProperty(kind="House")
     card_key = ndb.KeyProperty(kind="Card")
     comment = ndb.StringProperty()
     date = ndb.DateTimeProperty(auto_now_add=True)
@@ -44,3 +47,4 @@ class Post(ndb.Model):   #comment for a house
     house_key = ndb.KeyProperty(kind="House")
     content = ndb.StringProperty()
     number = ndb.IntegerProperty()
+    date = ndb.DateTimeProperty(auto_now_add=True)
