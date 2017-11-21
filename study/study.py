@@ -22,7 +22,7 @@
 
 (this plan probably needs consider the Ebbinghaus Forgetting Curve)
 
-2. User daily progress -> compare with planned progress
+[No need for that, schedule itself is dynamic] 2. User daily progress -> compare with planned progress
 (daily progress includes: known words, unknown words)
 
 if exceed
@@ -34,7 +34,7 @@ Another Function:
 
 [Done] 3. Show Known Words and Unknown Words (How many unknown words left)
 
-[Modification] 4. Show How many days left to complete
+[Done] 4. Show How many days left to complete
 
 [Done] 5. Show progress bar
 
@@ -215,29 +215,45 @@ class ShowProgressHandler(webapp2.RequestHandler):
     This handler is for showing the progress, need to be estimated by equation
     :input_1: house_id (repo id)
     :input_2: pigeon_id
-    :return: json output. two integers
-             1. num_of_remain_unlearn_key
-             2. approx_day_left (estimation)
+    :return: json output. three integers
+             1. num_of_unlearn_key
+             2. num_of_unfamiliar_key
+             3. approx_day_left (by estimation)
     """
     def get(self):
         pigeon_id = self.request.get('pigeon_id')
         house_id = self.request.get('house_id')
 
         list_of_familiar_factor = ops.get_list_of_familiar_factor(pigeon_id, house_id)
+        list_of_learn_factor = ops.get_list_of_learn_time(pigeon_id, house_id)
         number_of_key_per_day = ops.get_num_per_day(pigeon_id, house_id)
 
         # find out how many unlearn words (familiar_factor == 0)
-        count = 0
+        unlearn_count = 0
+        # find out how many unfamiliar words (0 < familiar_factor < 50)
+        unfamiliar_count = 0
+        total_learn_factor = 0
         for i in range(len(list_of_familiar_factor)):
             if list_of_familiar_factor[i] == 0:
-                count = count + 1
+                unlearn_count = unlearn_count + 1
+            if 0 < list_of_familiar_factor[i] < 50:
+                unfamiliar_count = unfamiliar_count + 1
+            # get the total learn factor for parametrize the approx day
+            total_learn_factor += list_of_learn_factor[i]
 
-        # TODO: need to be estimated well
-        # calculate how many days left to finish all unlearn words (basic)
-        approx_day_left = math.ceil(count / number_of_key_per_day)
+        # estimation part
+        # calculate the average learn factor
+        average_learn_factor = total_learn_factor / len(list_of_learn_factor)
+        day_new = float(unlearn_count) / float(number_of_key_per_day)
+        day_review = float(unfamiliar_count) / float(number_of_key_per_day)
+        # pre-parametrize approx day, get the max between day_new and day_review
+        approx_day_left = int(max(math.ceil(day_new), math.ceil(day_review)))
+        # parametrize the approx day with average learn factor, because the familiar factor will decrease with time
+        approx_day_left = approx_day_left / math.exp(- 1 / float(average_learn_factor))
 
         return_info = {
-            'num_of_remain_unlearn_key': count,
+            'num_of_unlearn_key': unlearn_count,
+            'num_of_unfamiliar_key': unfamiliar_count,
             'approx_day_left': approx_day_left
         }
         self.response.content_type = 'text/html'
