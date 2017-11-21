@@ -22,7 +22,8 @@ class GetTrendingViewServiceHandler(webapp2.RequestHandler):
 
 class GetCategoryServiceHandler(webapp2.RequestHandler):
     def get(self):
-        category_list = ops.get_catogory()
+        category = self.request.get("category")
+        category_list = ops.get_category(category)
         return_info = {
             'category_list': category_list
         }
