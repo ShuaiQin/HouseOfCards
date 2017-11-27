@@ -69,7 +69,7 @@ class GetMultipleQuizHandler(webapp2.RequestHandler):
         house_id = self.request.get('house_id')
 
         # all_cards is a list of dictionary
-        list_of_all_cards = ops.get_all_cards(house_id)
+        list_of_all_cards = ops.get_single_house(house_id)
 
         # get a list of all values for future convenience
         list_of_all_values = []
@@ -128,7 +128,7 @@ class GetTrueFalseQuizHandler(webapp2.RequestHandler):
         house_id = self.request.get('house_id')
 
         # all_cards is a list of dictionary
-        list_of_all_cards = ops.get_all_cards(house_id)
+        list_of_all_cards = ops.get_single_house(house_id)
 
         # get a list of all values for future convenience
         list_of_all_values = []
@@ -176,7 +176,7 @@ class MakeScheduleHandler(webapp2.RequestHandler):
         number_of_key_per_day = self.request.get('number_of_key_per_day')
         house_id = self.request.get('house_id')
 
-        list_of_all_cards = ops.get_all_cards(house_id)
+        list_of_all_cards = ops.get_single_house(house_id)
 
         # get the total card length
         total_cards = len(list_of_all_cards)
@@ -224,8 +224,21 @@ class ShowProgressHandler(webapp2.RequestHandler):
         pigeon_id = self.request.get('pigeon_id')
         house_id = self.request.get('house_id')
 
-        list_of_familiar_factor = ops.get_list_of_familiar_factor(pigeon_id, house_id)
-        list_of_learn_factor = ops.get_list_of_learn_time(pigeon_id, house_id)
+        # get all cards for generation of feed
+        list_of_all_cards = ops.get_single_house(house_id)
+
+        # each pigeon has a special familiar factor to each card, initial is 0
+        list_of_familiar_factor = []
+        # number of times (factor) the pigeon has learned this card
+        list_of_learn_factor = []
+        # get it one by one
+        for card in list_of_all_cards:
+            # iterate the key (although it has only one)
+            for card_key in card:
+                # append the familiar factor to the list
+                list_of_familiar_factor.append(ops.get_familiar_factor(pigeon_id, house_id, card_key))
+                list_of_learn_factor.append(ops.get_learn_factor(pigeon_id, house_id, card_key))
+
         number_of_key_per_day = ops.get_num_per_day(pigeon_id, house_id)
 
         # find out how many unlearn words (familiar_factor == 0)
@@ -275,11 +288,20 @@ class GetTodayTaskHandler(webapp2.RequestHandler):
         # the number of key per day the pigeon want to learn is pre-set by user
         number_of_key_per_day = ops.get_num_per_day(pigeon_id, house_id)
         # get all cards for generation of feed
-        list_of_all_cards = ops.get_all_cards(house_id)
+        list_of_all_cards = ops.get_single_house(house_id)
+
         # each pigeon has a special familiar factor to each card, initial is 0
-        list_of_familiar_factor = ops.get_list_of_familiar_factor(pigeon_id, house_id)
+        list_of_familiar_factor = []
         # number of times (factor) the pigeon has learned this card
-        list_of_learn_factor = ops.get_list_of_learn_time(pigeon_id, house_id)
+        list_of_learn_factor = []
+        # get it one by one
+        for card in list_of_all_cards:
+            # iterate the key (although it has only one)
+            for card_key in card:
+                # append the familiar factor to the list
+                list_of_familiar_factor.append(ops.get_familiar_factor(pigeon_id, house_id, card_key))
+                list_of_learn_factor.append(ops.get_learn_factor(pigeon_id, house_id, card_key))
+
         # the total number of the cards
         number_of_cards = len(list_of_all_cards)
 
@@ -311,9 +333,16 @@ class GetTodayTaskHandler(webapp2.RequestHandler):
                 # learn factor gets increased, the more time you review the less chance you forget it
                 list_of_learn_factor[i] = list_of_learn_factor[i] * 2.0
 
-        # store the familiar factor and learn factor in db
-        ops.set_familiar_factor(pigeon_id, house_id, list_of_familiar_factor)
-        ops.set_list_of_learn_factor(pigeon_id, house_id, list_of_learn_factor)
+        # set a count 1 -> 1 card
+        count = 0
+        for card in list_of_all_cards:
+            # iterate the key (although it has only one)
+            for card_key in card:
+                # set a familiar factor for user towards each card
+                ops.set_familiar_factor(pigeon_id, house_id, card_key, list_of_familiar_factor[count])
+                # set a learn factor for user towards each card
+                ops.set_learn_factor(pigeon_id, house_id, card_key, list_of_learn_factor[count])
+                count = count + 1
 
         # construct a list of feed cards
         list_of_feed_cards = []
@@ -338,7 +367,7 @@ class SetScheduleHandler(webapp2.RequestHandler):
         ops.set_schedule(pigeon_id, house_id, num_per_day)
 
 
-class CheckScheduleHandler(webapp2.RequestHandler):
+class CheckScheduleFinishHandler(webapp2.RequestHandler):
     """
     This handler is for checking if the progress is end
     :input_1: house_id (repo id)
@@ -348,7 +377,18 @@ class CheckScheduleHandler(webapp2.RequestHandler):
     def get(self):
         pigeon_id = self.request.get('pigeon_id')
         house_id = self.request.get('house_id')
-        list_of_familiar_factor = ops.get_list_of_familiar_factor(pigeon_id, house_id)
+
+        # get all cards for generation of feed
+        list_of_all_cards = ops.get_single_house(house_id)
+
+        # each pigeon has a special familiar factor to each card, initial is 0
+        list_of_familiar_factor = []
+        # get it one by one
+        for card in list_of_all_cards:
+            # iterate the key (although it has only one)
+            for card_key in card:
+                # append the familiar factor to the list
+                list_of_familiar_factor.append(ops.get_familiar_factor(pigeon_id, house_id, card_key))
 
         # set the threshhold to 50.0, maybe change later
         count = 0
@@ -369,6 +409,40 @@ class CheckScheduleHandler(webapp2.RequestHandler):
         self.response.write(json.dumps(return_info))
 
 
+class CheckStudyOrNotHandler(webapp2.RequestHandler):
+    def get(self):
+        pigeon_id = self.request.get('pigeon_id')
+        house_id = self.request.get('house_id')
+        schedule_day = ops.get_num_per_day(pigeon_id, house_id)
+
+        if schedule_day == 0:
+            is_studied = False
+        else:
+            is_studied = True
+
+        return_info = {
+            'is_studied': is_studied
+        }
+
+        self.response.content_type = 'text/html'
+        self.response.write(json.dumps(return_info))
+
+
+class GetScheduleHandler(webapp2.RequestHandler):
+    def get(self):
+        pigeon_id = self.request.get('pigeon_id')
+        house_id = self.request.get('house_id')
+
+        schedule_day = ops.get_num_per_day(pigeon_id, house_id)
+
+        return_info = {
+            'schedule_day': schedule_day
+        }
+
+        self.response.content_type = 'text/html'
+        self.response.write(json.dumps(return_info))
+
+
 service = webapp2.WSGIApplication([
     ('/', MainHandler),
     ('/getmultiplequiz', GetMultipleQuizHandler),
@@ -376,6 +450,8 @@ service = webapp2.WSGIApplication([
     ('/makeschedule', MakeScheduleHandler),
     ('/showprogress', ShowProgressHandler),
     ('/gettodaytask', GetTodayTaskHandler),
-    ('/setshedule', SetScheduleHandler),
-    ('/checkschedulefinish', CheckScheduleHandler)
+    ('/setschedule', SetScheduleHandler),
+    ('/checkschedulefinish', CheckScheduleFinishHandler),
+    ('/checkstudyornot', CheckStudyOrNotHandler),
+    ('/getschedule', GetScheduleHandler)
 ], debug=True)
