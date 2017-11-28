@@ -40,3 +40,4 @@ class RemoveHouseServiceHandler(webapp2.RequestHandler):
                 ops.remove_all_sub(str(house))
                 ops.remove_house(str(house))
 
+
