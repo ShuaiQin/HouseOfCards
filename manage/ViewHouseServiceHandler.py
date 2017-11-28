@@ -1,8 +1,9 @@
 #this file include handlers that show houses or cards
 
-import webapp2
 import json
-import model.ops
+import ops
+import webapp2
+
 
 class ViewAllHousesServiceHandler(webapp2.RequestHandler):
     def get(self):

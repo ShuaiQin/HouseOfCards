@@ -14,28 +14,31 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-import webapp2
-import model.ops
 import json
-from manage.ManageHouseServiceHandlers import CreateHouseServiceHandler
-from manage.ManageHouseServiceHandlers import RemoveHouseServiceHandler
-from manage.ManageCardServiceHandlers import AddCardServiceHandler
-from manage.ManageCardServiceHandlers import RemoveCardServiceHandler
-from manage.ManageCardServiceHandlers import EditCardServiceHandler
-from manage.ManageSubscriptionServiceHandlers import CreateSubscriptionServiceHandler
-from manage.ManageSubscriptionServiceHandlers import DeleteSubscriptionServiceHandler
-from manage.PullRequestsServiceHandlers import CreatePullRequestServiceHandler
-from manage.PullRequestsServiceHandlers import ShowAllPullRequestServiceHandler
-from manage.PullRequestsServiceHandlers import ResolvePullRequestServiceHandler
-from manage.IssuesServiceHandlers import AddIssueServiceHandler
-from manage.IssuesServiceHandlers import ShowAllIssuesServiceHandler
-from manage.IssuesServiceHandlers import ResolveIssueServiceHandler
-from manage.PostServiceHandlers import AddNewPostServiceHandler
-from manage.TrendingServiceHandlers import GetTrendingSubServiceHandler
-from manage.TrendingServiceHandlers import GetTrendingViewServiceHandler
-from manage.TrendingServiceHandlers import GetCategoryServiceHandler
-from manage.ViewHouseServiceHandler import ViewAllHousesServiceHandler
-from manage.ViewHouseServiceHandler import ViewSingleHouseServiceHandler
+
+import webapp2
+from IssuesServiceHandlers import AddIssueServiceHandler
+from IssuesServiceHandlers import ResolveIssueServiceHandler
+from IssuesServiceHandlers import ShowAllIssuesServiceHandler
+from ManageCardServiceHandlers import AddCardServiceHandler
+from ManageCardServiceHandlers import EditCardServiceHandler
+from ManageCardServiceHandlers import RemoveCardServiceHandler
+from ManageHouseServiceHandlers import CreateHouseServiceHandler
+from ManageHouseServiceHandlers import RemoveHouseServiceHandler
+from ManageSubscriptionServiceHandlers import CreateSubscriptionServiceHandler
+from ManageSubscriptionServiceHandlers import DeleteSubscriptionServiceHandler
+from PostServiceHandlers import AddNewPostServiceHandler
+from PullRequestsServiceHandlers import CreatePullRequestServiceHandler
+from PullRequestsServiceHandlers import ResolvePullRequestServiceHandler
+from PullRequestsServiceHandlers import ShowAllPullRequestServiceHandler
+from TrendingServiceHandlers import GetCategoryServiceHandler
+from TrendingServiceHandlers import GetTrendingSubServiceHandler
+from TrendingServiceHandlers import GetTrendingViewServiceHandler
+from ViewHouseServiceHandler import ViewAllHousesServiceHandler
+from ViewHouseServiceHandler import ViewSingleHouseServiceHandler
+
+import ops
+import study
 
 
 class MainHandler(webapp2.RequestHandler):
@@ -83,5 +86,15 @@ service = webapp2.WSGIApplication([
     ('/service-addpost',AddNewPostServiceHandler),
     ('/service-trendingsub',GetTrendingSubServiceHandler),
     ('/service-trendingview',GetTrendingViewServiceHandler),
-    ('/service-category',GetCategoryServiceHandler)
+    ('/service-category',GetCategoryServiceHandler),
+    #
+    ('/getmultiplequiz', study.GetMultipleQuizHandler),
+    ('/gettruefalsequiz', study.GetTrueFalseQuizHandler),
+    ('/makeschedule', study.MakeScheduleHandler),
+    ('/showprogress', study.ShowProgressHandler),
+    ('/gettodaytask', study.GetTodayTaskHandler),
+    ('/setschedule', study.SetScheduleHandler),
+    ('/checkschedulefinish', study.CheckScheduleFinishHandler),
+    ('/checkstudyornot', study.CheckStudyOrNotHandler),
+    ('/getschedule', study.GetScheduleHandler)
 ], debug=True)

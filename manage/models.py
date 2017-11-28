@@ -23,7 +23,6 @@ class Subscription(ndb.Model):
 class Progress(ndb.Model):
     pigeon_key = ndb.KeyProperty(kind="Pigeon")
     card_key = ndb.KeyProperty(kind="Card")
-    # 熟练度
 
 class PullRequest(ndb.Model):
     pigeon_key = ndb.KeyProperty(kind="Pigeon")

@@ -3,6 +3,7 @@
 import webapp2
 import random
 import json
+import ops
 
 class CreateHouseServiceHandler(webapp2.RequestHandler):
     def get(self):

@@ -1,8 +1,9 @@
 #this file include handlers that manage user cards
 
-import webapp2
 import json
-import model.ops
+import webapp2
+import ops
+
 
 class AddCardServiceHandler(webapp2.RequestHandler):
     def get(self):
