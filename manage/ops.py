@@ -22,7 +22,7 @@ def create_pigeon(pigeon_id):
     pigeon.key = ndb.Key(Pigeon,pigeon_id)
     pigeon.put()
 
-def create_house(cover_url,name,category,pigeon_id):
+def create_house(pigeon_id,name,cover_url,category):
     house = House( cover_url=cover_url,name=name,category=category,view=1,num_of_subed=0 )
     house.key = ndb.Key(House,name,parent = ndb.Key(Pigeon,pigeon_id) )
     house.put()
