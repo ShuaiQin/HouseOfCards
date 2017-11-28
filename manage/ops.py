@@ -34,7 +34,7 @@ def house_exists(house_name):
     else:
         return False
 
-def add_card(key,value,house_name):
+def add_card(house_name,key,value):
     house_list = House.query(House.name==house_name).fetch()
     if house_list:
         card = Card(key=key, value=value)
