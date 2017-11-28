@@ -37,6 +37,7 @@ class RemoveHouseServiceHandler(webapp2.RequestHandler):
 
         for house in delete_house_list:
             if ops.house_exists(house):
-                ops.remove_house(str(house))
                 ops.remove_all_sub(str(house))
+                ops.remove_house(str(house))
+
 
