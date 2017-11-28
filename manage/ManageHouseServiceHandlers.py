@@ -39,5 +39,3 @@ class RemoveHouseServiceHandler(webapp2.RequestHandler):
             if ops.house_exists(house):
                 ops.remove_all_sub(str(house))
                 ops.remove_house(str(house))
-
-
