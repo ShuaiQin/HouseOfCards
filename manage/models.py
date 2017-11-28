@@ -12,7 +12,7 @@ class House(ndb.Model):      # key is name of house
     num_of_subed = ndb.IntegerProperty()
 
 class Card(ndb.Model):      # key is name of card
-    key = ndb.StringProperty()
+    card_key = ndb.StringProperty()
     value = ndb.StringProperty()
 
 class Subscription(ndb.Model):
