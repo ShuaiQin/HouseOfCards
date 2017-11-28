@@ -288,8 +288,8 @@ def add_post(house_name, user_id, content):
     house_key = house_list[0].key
     post_list = Post.query( Post.pigeon_key==pigeon_key, Post.house_key==house_key )
     if post_list:
-        len = len(post_list)
-        post = Post(pigeon_key=pigeon_key, house_key=house_key, content=content, number=len+1)
+        length = len(post_list)
+        post = Post(pigeon_key=pigeon_key, house_key=house_key, content=content, number=length+1)
         post.put()
         return
     else:
