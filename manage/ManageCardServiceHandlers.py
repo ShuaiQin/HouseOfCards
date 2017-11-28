@@ -7,9 +7,9 @@ import ops
 
 class AddCardServiceHandler(webapp2.RequestHandler):
     def get(self):
-        house_name = self.response.get('house_name')
-        card_key = self.response.get('card_key')
-        card_value = self.response.get('card_value')
+        house_name = self.request.get('house_name')
+        card_key = self.request.get('card_key')
+        card_value = self.request.get('card_value')
 
         if ops.card_exists(house_name, card_key):
             return_info = {
@@ -27,7 +27,7 @@ class AddCardServiceHandler(webapp2.RequestHandler):
 
 class RemoveCardServiceHandler(webapp2.RequestHandler):
     def get(self):
-        house_name = self.response.get('house_name')
+        house_name = self.request.get('house_name')
         delete_card_string = self.request.get('delete_card_string')
         delete_card_list = delete_card_string.split(',')
 
@@ -38,10 +38,10 @@ class RemoveCardServiceHandler(webapp2.RequestHandler):
 
 class EditCardServiceHandler(webapp2.RequestHandler):
     def get(self):
-        house_name = self.response.get('house_name')
-        card_key = self.response.get('card_key')
-        mode = self.response.get("mode")
-        updated = self.response.get('updated')
+        house_name = self.request.get('house_name')
+        card_key = self.request.get('card_key')
+        mode = self.request.get("mode")
+        updated = self.request.get('updated')
 
         if not ops.card_exists(house_name, card_key):
             return_info = {
