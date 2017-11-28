@@ -445,6 +445,21 @@ class GetScheduleHandler(webapp2.RequestHandler):
         self.response.write(json.dumps(return_info))
 
 
+class ForTest(webapp2.RequestHandler):
+    def get(self):
+        pigeon_id = self.request.get('pigeon_id')
+        house_id = self.request.get('house_id')
+
+        list_of_dict = ops.get_single_house_2(house_id)
+
+        return_info = {
+            'list_of_dict': list_of_dict
+        }
+
+        self.response.content_type = 'text/html'
+        self.response.write(json.dumps(return_info))
+
+
 service = webapp2.WSGIApplication([
     ('/', MainHandler),
     ('/getmultiplequiz', GetMultipleQuizHandler),

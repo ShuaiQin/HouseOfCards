@@ -395,5 +395,17 @@ def set_learn_factor(user_id, house_name, card_key, learn_factor):
         return
 
 
+def get_single_house_2(house_name):
+    house_list = House.query(House.name == house_name).fetch()
+    if house_list:
+        house = house_list[0]
+        house.view = house.view+1
+        house.put()
+        card_list = Card.query(ancestor=house.key).fetch()
+        return map(lambda s: {str(s.card_key): str(s.value)},
+                   card_list)
+    else:
+        return
+
 
 
