@@ -86,11 +86,15 @@ def delete_subscription(pigeon_id, house_name):
 
 def get_sub_house(pigeon_id):
     pigeon_key = ndb.Key(Pigeon, pigeon_id)
-    house_list = House.query( House.pigeon_key==pigeon_key ).fetch()
-    return map(lambda s: {"house_name": s.name, "cover_url": s.cover_url,
-                          "category": s.category , "view": s.view,
-                          "num_of_subed": s.num_of_subed},
-               house_list)
+    sub_list = Subscription.query( Subscription.pigeon_key==pigeon_key )
+    house_list = []
+    if sub_list:
+        for sub in sub_list:
+            house_list.append( sub.house_key.get() )
+        return map(lambda s: {"house_name": s.name, "cover_url": s.cover_url,
+                              "category": s.category , "view": s.view,
+                              "num_of_subed": s.num_of_subed},
+                   house_list)
 
 def get_all_house():
     house_list = House.query().fetch()
@@ -105,7 +109,7 @@ def get_single_house(house_name):
         house = house_list[0]
         house.view = house.view+1
         house.put()
-        card_list = Card.query(parent=house.key)
+        card_list = Card.query(ancestor=house.key)
         return map(lambda s: {"key": s.key, "value": s.value},
                    card_list)
     else:
