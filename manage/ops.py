@@ -34,10 +34,10 @@ def house_exists(house_name):
     else:
         return False
 
-def add_card(key,value,house_name):
+def add_card(house_name,key,value):
     house_list = House.query(House.name==house_name).fetch()
     if house_list:
-        card = Card(key=key, value=value)
+        card = Card( card_key=key, value=value )
         house = house_list[0]
         card.key = ndb.Key(Card,key,parent = house.key)
         card.put()
@@ -173,7 +173,7 @@ def edit_card_key (house_name, card_key, new_card_key):
     value = card.value
 
     remove_card(house_name, card_key)
-    add_card(card_key, value, house_name)
+    add_card(house_name, card_key, value)
     return
 
 def edit_card_content (house_name, card_key, new_card_content):
@@ -206,7 +206,7 @@ def approve_pull_request(house_name, user_id, date):
     if pr_list:
         pr = pr_list[0]
         if pr.mode=='add':
-            add_card(pr.new_key, pr.new_value, pr.house_key.get().name)
+            add_card(pr.house_key.get().name, pr.new_key, pr.new_value)
             pr.key.delete()
             return
         elif pr.mode=='remove':
