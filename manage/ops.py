@@ -58,12 +58,16 @@ def get_self_house(pigeon_id):
                house_list)
 
 
-def create_subscription(pigeon_id, house_name,num_per_day):
+def create_subscription(pigeon_id, house_name):
     pigeon_key = ndb.Key(Pigeon,pigeon_id)
     house_list = House.query(name=house_name).fetch()
     house_key = house_list[0].key
-    subscription = Subscription( pigeon_key=pigeon_key, house_key=house_key,num_per_day=num_per_day )
+    subscription = Subscription( pigeon_key=pigeon_key, house_key=house_key,num_per_day=0 )
     subscription.put()
+
+    card_list = Card.query(parent=house_key)
+    for card in card_list:
+        _initailize_progress(pigeon_key,card.key)
 
     house = house_list[0]
     house.num_of_subed = house.num_of_subed+1
@@ -308,3 +312,84 @@ def get_category(category):
     return map(lambda s: {"house_name": s.name, "cover_url": s.cover_url,
                           "num_of_subed": s.num_of_subed, "view": s.view},
                house_list)
+
+
+def get_num_per_day(user_id, house_name):
+    pigeon_key = ndb.Key(Pigeon, user_id)
+    house_list = House.query(name=house_name).fetch()
+    house_key = house_list[0].key
+    sub_list = Subscription.query(pigeon_key=pigeon_key, house_key=house_key)
+    if sub_list:
+        return sub_list[0].num_per_day
+    else:
+        return
+
+def _initailize_progress(pigeon_key,card_key):
+    progress = Progress(pigeon_key=pigeon_key, card_key=card_key, familiar_factor=0, learn_factor=1)
+    progress.put()
+
+def set_schedule(user_id, house_name, num_per_day):
+    pigeon_key = ndb.Key(Pigeon, user_id)
+    house_list = House.query(name=house_name).fetch()
+    house_key = house_list[0].key
+    sub_list = Subscription.query(pigeon_key=pigeon_key, house_key=house_key)
+    if sub_list:
+        sub_list[0].num_per_day = num_per_day
+        sub_list[0].put()
+        return
+    else:
+        return
+
+def get_familiar_factor(user_id, house_name, card_key):
+    pigeon_key = ndb.Key(Pigeon, user_id)
+    house_list = House.query(name=house_name).fetch()
+    house_key = house_list[0].key
+    card_key = ndb.Key(Card, card_key, parent=house_key)
+    progress_list = Progress.query(pigeon_key=pigeon_key,card_key=card_key)
+    if progress_list:
+        return progress_list[0].familiar_factor
+    else:
+        return
+
+def set_familiar_factor(user_id, house_name, card_key, familiar_factor):
+    pigeon_key = ndb.Key(Pigeon, user_id)
+    house_list = House.query(name=house_name).fetch()
+    house_key = house_list[0].key
+    card_key = ndb.Key(Card, card_key, parent=house_key)
+    progress_list = Progress.query(pigeon_key=pigeon_key,card_key=card_key)
+    if progress_list:
+        progress = progress_list[0]
+        progress.familiar_factor = familiar_factor
+        progress.put()
+        return
+    else:
+        return
+
+def get_learn_factor(user_id, house_name, card_key):
+    pigeon_key = ndb.Key(Pigeon, user_id)
+    house_list = House.query(name=house_name).fetch()
+    house_key = house_list[0].key
+    card_key = ndb.Key(Card, card_key, parent=house_key)
+    progress_list = Progress.query(pigeon_key=pigeon_key,card_key=card_key)
+    if progress_list:
+        return progress_list[0].learn_factor
+    else:
+        return
+
+def set_learn_factor(user_id, house_name, card_key, learn_factor):
+    pigeon_key = ndb.Key(Pigeon, user_id)
+    house_list = House.query(name=house_name).fetch()
+    house_key = house_list[0].key
+    card_key = ndb.Key(Card, card_key, parent=house_key)
+    progress_list = Progress.query(pigeon_key=pigeon_key,card_key=card_key)
+    if progress_list:
+        progress = progress_list[0]
+        progress.learn_factor = learn_factor
+        progress.put()
+        return
+    else:
+        return
+
+
+
+
