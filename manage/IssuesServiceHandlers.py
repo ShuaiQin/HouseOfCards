@@ -1,8 +1,9 @@
 #this file include handlers that manage user issues
 
-import webapp2
-import model.ops
 import json
+
+import webapp2
+import ops
 
 class AddIssueServiceHandler(webapp2.RequestHandler):
     def get(self):

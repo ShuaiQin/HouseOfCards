@@ -23,8 +23,11 @@ class Subscription(ndb.Model):
 class Progress(ndb.Model):
     pigeon_key = ndb.KeyProperty(kind="Pigeon")
     card_key = ndb.KeyProperty(kind="Card")
+<<<<<<< HEAD:manage/models.py
+=======
     familiar_factor = ndb.FloatProperty()
     learn_factor = ndb.IntegerProperty()
+>>>>>>> master:model/models.py
 
 class PullRequest(ndb.Model):
     pigeon_key = ndb.KeyProperty(kind="Pigeon")

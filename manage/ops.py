@@ -1,6 +1,6 @@
 from google.appengine.ext import ndb
 
-from models import *
+from models import Pigeon, House, Card, Subscription, Progress, PullRequest, Issue, Post
 
 
 '''
@@ -11,7 +11,7 @@ account.put()
 '''
 
 def pigeon_exists(pigeon_id):
-    pigeon_list = Pigeon.query(pigeon_id = pigeon_id).fetch()
+    pigeon_list = Pigeon.query(Pigeon.pigeon_id == pigeon_id).fetch()
     if pigeon_list:
         return True
     else:

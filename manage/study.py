@@ -42,11 +42,13 @@ Another Function:
 
 """
 
-import webapp2
 import json
-import random
 import math
-from model import ops
+import random
+
+import webapp2
+
+import ops
 
 
 class MainHandler(webapp2.RequestHandler):

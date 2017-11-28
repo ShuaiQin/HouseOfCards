@@ -1,6 +1,7 @@
 #this file include handlers that manage user posts
 
 import webapp2
+import ops
 
 class AddNewPostServiceHandler(webapp2.RequestHandler):
     def get(self):

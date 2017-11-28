@@ -4,5 +4,13 @@ threadsafe: yes
 service: manage
 
 handlers:
+
+#- url: /model
+#  static_dir: ../model
+
 - url: /.*
-  script: manage.service
+  script: MainHandlers.service
+
+
+
+
