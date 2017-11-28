@@ -65,7 +65,7 @@ def create_subscription(pigeon_id, house_name):
     subscription = Subscription( pigeon_key=pigeon_key, house_key=house_key,num_per_day=0 )
     subscription.put()
 
-    card_list = Card.query(parent=house_key)
+    card_list = Card.query(ancestor=house_key)
     for card in card_list:
         _initailize_progress(pigeon_key,card.key)
 
