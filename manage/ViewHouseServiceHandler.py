@@ -24,7 +24,7 @@ class ViewSingleHouseServiceHandler(webapp2.RequestHandler):
         # get all cards in house
         all_card_list = ops.get_single_house(house_name)
 
-        owner = ops.get_house_owner(house_name)["Id"]  # It's a dict, need to get the Id
+        owner = ops.get_house_owner(house_name)
         is_owned = (owner == user_id)
 
         is_subed = ops.is_subscribed(house_name, user_id)
@@ -35,5 +35,6 @@ class ViewSingleHouseServiceHandler(webapp2.RequestHandler):
             'is_subed': is_subed,
             'is_owned': is_owned
         }
+        self.response.content_type = 'text/html'
         self.response.write(json.dumps(return_info))
 

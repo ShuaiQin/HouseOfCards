@@ -110,7 +110,7 @@ def get_single_house(house_name):
         house.view = house.view+1
         house.put()
         card_list = Card.query(ancestor=house.key).fetch()
-        return map(lambda s: {"key": s.key, "value": s.value},
+        return map(lambda s: {"key": s.card_key, "value": s.value},
                    card_list)
     else:
         return
@@ -119,7 +119,7 @@ def get_house_owner(house_name):
     house_list = House.query(House.name == house_name).fetch()
     if house_list:
         house = house_list[0]
-        id = house.key().parent().get().pigeon_id
+        id = house.key.parent().get().pigeon_id
     return id
 
 
