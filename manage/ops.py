@@ -17,10 +17,18 @@ def pigeon_exists(pigeon_id):
     else:
         return False
 
-def create_pigeon(pigeon_id):
-    pigeon = Pigeon(pigeon_id = pigeon_id)
+def create_pigeon(pigeon_id, avatar):
+    pigeon = Pigeon(pigeon_id = pigeon_id, avatar = avatar)
     pigeon.key = ndb.Key(Pigeon,pigeon_id)
     pigeon.put()
+
+def get_avatar( pigeon_id ):
+    pigeon_list = Pigeon.query(Pigeon.pigeon_id == pigeon_id).fetch()
+    if pigeon_list:
+        return pigeon_list[0].avatar
+    else:
+        return
+
 
 def create_house(pigeon_id,name,cover_url,category):
     house = House( cover_url=cover_url,name=name,category=category,view=1,num_of_subed=0 )

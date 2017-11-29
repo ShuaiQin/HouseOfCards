@@ -3,6 +3,7 @@ from google.appengine.ext import ndb
 
 class Pigeon(ndb.Model):     # key is user id
     pigeon_id = ndb.StringProperty()  # user's id
+    avatar = ndb.StringProperty()
 
 class House(ndb.Model):      # key is name of house
     cover_url = ndb.StringProperty()
