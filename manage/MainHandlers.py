@@ -27,6 +27,7 @@ from ManageHouseServiceHandlers import CreateHouseServiceHandler
 from ManageHouseServiceHandlers import RemoveHouseServiceHandler
 from ManageSubscriptionServiceHandlers import CreateSubscriptionServiceHandler
 from ManageSubscriptionServiceHandlers import DeleteSubscriptionServiceHandler
+from ManageSubscriptionServiceHandlers import CheckSubscriptionServiceHandler
 from PostServiceHandlers import AddNewPostServiceHandler
 from PullRequestsServiceHandlers import CreatePullRequestServiceHandler
 from PullRequestsServiceHandlers import ResolvePullRequestServiceHandler
@@ -87,6 +88,7 @@ service = webapp2.WSGIApplication([
     ('/service-trendingsub',GetTrendingSubServiceHandler),
     ('/service-trendingview',GetTrendingViewServiceHandler),
     ('/service-category',GetCategoryServiceHandler),
+    ('/service-checksubscription', CheckSubscriptionServiceHandler),
     #
     ('/getmultiplequiz', study.GetMultipleQuizHandler),
     ('/gettruefalsequiz', study.GetTrueFalseQuizHandler),
