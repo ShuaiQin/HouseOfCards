@@ -28,12 +28,14 @@ class ViewSingleHouseServiceHandler(webapp2.RequestHandler):
         is_owned = (owner == user_id)
 
         is_subed = ops.is_subscribed(house_name, user_id)
+        house_info = ops.get_single_house_info(house_name)
 
         return_info = {
             #'page_range': min(int(page_range), len(all_pict_list)),
             'card_list': all_card_list,
             'is_subed': is_subed,
-            'is_owned': is_owned
+            'is_owned': is_owned,
+            'house_info': house_info
         }
         self.response.content_type = 'text/html'
         self.response.write(json.dumps(return_info))

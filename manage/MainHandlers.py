@@ -29,6 +29,7 @@ from ManageSubscriptionServiceHandlers import CreateSubscriptionServiceHandler
 from ManageSubscriptionServiceHandlers import DeleteSubscriptionServiceHandler
 from ManageSubscriptionServiceHandlers import CheckSubscriptionServiceHandler
 from PostServiceHandlers import AddNewPostServiceHandler
+from PostServiceHandlers import GetPostServiceHandler
 from PullRequestsServiceHandlers import CreatePullRequestServiceHandler
 from PullRequestsServiceHandlers import ResolvePullRequestServiceHandler
 from PullRequestsServiceHandlers import ShowAllPullRequestServiceHandler
@@ -87,6 +88,7 @@ service = webapp2.WSGIApplication([
     ('/service-showissues',ShowAllIssuesServiceHandler),
     ('/service-resolveissue',ResolveIssueServiceHandler),
     ('/service-addpost',AddNewPostServiceHandler),
+    ('/service-getpost', GetPostServiceHandler),
     ('/service-trendingsub',GetTrendingSubServiceHandler),
     ('/service-trendingview',GetTrendingViewServiceHandler),
     ('/service-category',GetCategoryServiceHandler),
