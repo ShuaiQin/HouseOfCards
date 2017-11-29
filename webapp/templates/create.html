@@ -1,0 +1,50 @@
+{% include 'header.html' %}
+<script>
+    $(document).ready(function () {
+        $('.selection.dropdown')
+            .dropdown()
+        ;
+    });
+</script>
+<div class="ui two column centered grid">
+    <div class="row"></div>
+    <div class="row">
+        <div class="eleven wide column">
+            <h1 class="header">
+                Create your own House!
+            </h1>
+        </div>
+    </div>
+    <div class="row"></div>
+    <div class="ui eleven wide column">
+        <form class="ui form">
+            <div class="two fields">
+                <div class="field">
+                    <label>House Name</label>
+                    <input type="text" name="first-name" placeholder="House Name">
+                </div>
+                <div class="field">
+                    <label>Category</label>
+                    <div class="ui selection dropdown">
+                        <div class="default text">Select</div>
+                        <i class="dropdown icon"></i>
+                        <input type="hidden" name="gender">
+                        <div class="menu">
+                            <div class="item" data-value="fl">Foreign Language</div>
+                            <div class="item" data-value="history">History</div>
+                            <div class="item" data-value="computer">Computer</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="field">
+                <label>Description (Optional)</label>
+                <input type="text" name="first-name" placeholder="Optional">
+            </div>
+
+            <button class="ui basic button" type="submit">Create</button>
+        </form>
+    </div>
+</div>
+
+{% include 'footer.html' %}

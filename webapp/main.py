@@ -24,6 +24,7 @@ from handlers.ExplorePage import *
 from handlers.StudyPage import *
 from handlers.PigeonPage import *
 from handlers.HousePage import *
+from handlers.CreatePage import *
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
@@ -48,5 +49,6 @@ app = webapp2.WSGIApplication([
     ('/explore', ExplorePage),
     ('/study', StudyPage),
     ('/pigeon/(\w+)', PigeonPage, 'id'),
-    ('/house/(\w+)', HousePage, 'name')
+    ('/house/(\w+)', HousePage, 'name'),
+    ('/create', CreatePage)
 ], debug=True)

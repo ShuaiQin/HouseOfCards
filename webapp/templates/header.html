@@ -9,6 +9,15 @@
     <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
 
     <script src="/static/js/header.js"></script>
+    <style type="text/css">
+        .content-wrapper {
+            min-height: 100%;
+
+            /* Equal to height of footer */
+            /* But also accounting for potential margin-bottom of last child */
+            margin-bottom: -40px;
+        }
+    </style>
 
 </head>
 <body>
@@ -46,3 +55,4 @@
         {% endif %}
     </div>
 </div>
+<div class="content-wrapper">
