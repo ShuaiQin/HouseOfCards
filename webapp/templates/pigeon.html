@@ -1,23 +1,111 @@
 {% include 'header.html' %}
 
+<script>
+    $(document).ready(function () {
+        $('.demo.menu .item')
+            .tab({
+                history: false
+            })
+        ;
+    });
+</script>
+
 <div class="ui two column centered grid">
+    <div class="row"></div>
+    <div class="row">
+        <div class="thirteen wide column">
+            <h2 class="header">
+                {{ pigeon }}'s Nest
+            </h2>
+        </div>
+    </div>
     <div class="row">
         <div class="three wide column">
-            <h2 class="header">
-                {{ pigeon }}'s House
-            </h2>
-            <div class="ui fluid card">
+            <div class="ui secondary menu">
+                <h3 class="item header">Bio</h3>
+            </div>
+            <div class="ui card">
                 <div class="image">
                     <img src="/static/b.png">
                 </div>
                 <div class="content">
-                    <a class="header">Block</a>
+                    <a class="header">User Name</a>
                 </div>
             </div>
         </div>
         <div class="ten wide column">
+            <div class="ui pointing secondary demo menu">
+                <a class="item active" data-tab="your-house">Your House</a>
+                <a class="item" data-tab="watching">Watching House</a>
+                <a class="item" data-tab="progress">Progress</a>
+            </div>
+            <div class="ui tab active" data-tab="your-house">
+                <div class="ui secondary menu">
+                    <h3 class="item header">Managing</h3>
+                    <div class="right menu">
+                        <div class="item">
+                            <button class="ui mini basic button">New House</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui four cards">
+                    <a class="ui link card" href="/house/aaa">
+                        <div class="image">
+                            <img src="/static/b.png">
+                        </div>
+                        <div class="content">
+                            <div class="header">aaa</div>
+                        </div>
+                    </a>
+                    <a class="ui link card" href="/house/aaa">
+                        <div class="image">
+                            <img src="/static/b.png">
+                        </div>
+                        <div class="content">
+                            <div class="header">aaa</div>
+                        </div>
+                    </a>
+                    <a class="ui link card" href="/house/aaa">
+                        <div class="image">
+                            <img src="/static/b.png">
+                        </div>
+                        <div class="content">
+                            <div class="header">aaa</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="ui tab" data-tab="watching">
+                <div class="ui secondary menu">
+                    <h3 class="item header">Managing</h3>
+                    <div class="right menu">
+                        <div class="item">
+                            <button class="ui mini basic button">New House</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ui tab" data-tab="progress">
+                <div class="ui secondary menu">
+                    <h3 class="item header">Learning</h3>
+                    <div class="right menu">
+                        <div class="item">
+                            <button class="ui mini basic button">New House</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui secondary menu">
+                    <h3 class="item header">Mastered</h3>
+                    <div class="right menu">
+                        <div class="item">
+                            <button class="ui mini basic button">New House</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+    <div class="row"></div>
 </div>
 
 {% include 'footer.html' %}

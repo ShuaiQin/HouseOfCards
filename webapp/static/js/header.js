@@ -6,14 +6,14 @@ $(document)
         $('.ui.menu .ui.dropdown').dropdown({
             on: 'click'
         });
-        $('.ui.menu a.nav-item')
-            .on('click', function () {
-                $(this)
-                    .addClass('active')
-                    .siblings()
-                    .removeClass('active')
-                ;
-            })
-        ;
+        // $('.ui.menu a.nav-item')
+        //     .on('click', function () {
+        //         $(this)
+        //             .addClass('active')
+        //             .siblings()
+        //             .removeClass('active')
+        //         ;
+        //     })
+        // ;
     })
 ;
