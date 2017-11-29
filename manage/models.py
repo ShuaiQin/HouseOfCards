@@ -34,6 +34,7 @@ class PullRequest(ndb.Model):
     new_value = ndb.StringProperty()
     mode = ndb.StringProperty()  # query,update,insert,delete
     date = ndb.DateTimeProperty(auto_now_add=True)
+    date_str = ndb.StringProperty()
 
 
 class Issue(ndb.Model):    #commont for a card
@@ -42,6 +43,7 @@ class Issue(ndb.Model):    #commont for a card
     card_key = ndb.KeyProperty(kind="Card")
     comment = ndb.StringProperty()
     date = ndb.DateTimeProperty(auto_now_add=True)
+    date_str = ndb.StringProperty()
 
 class Post(ndb.Model):   #comment for a house
     pigeon_key = ndb.KeyProperty(kind="Pigeon")
