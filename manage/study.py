@@ -287,6 +287,7 @@ class ShowProgressHandler(webapp2.RequestHandler):
         self.response.write(json.dumps(return_info))
 
 
+# TODO: if miss this card in list of card, it's ok, although garbage. if get an extra card -> db add it in progress
 class GetTodayTaskHandler(webapp2.RequestHandler):
     """
     This handler is for returning the words need to be learned and reviewed based on Ebbinghaus equation
