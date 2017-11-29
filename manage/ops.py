@@ -299,13 +299,32 @@ def add_post(house_name, user_id, content):
     post_list = Post.query( Post.pigeon_key==pigeon_key, Post.house_key==house_key ).fetch()
     if post_list:
         length = len(post_list)
-        post = Post(pigeon_key=pigeon_key, house_key=house_key, content=content, number=length+1)
+        post = Post(pigeon_key=pigeon_key, house_key=house_key, content=content, number=length+1, date_str='')
+        post.put()
+        date2str = str(post.date)
+        str_list = date2str.split('.')
+        post.date_str = str_list[0]
+        post.put()
+        date2str = str(post.date)
+        str_list = date2str.split('.')
+        post.date_str = str_list[0]
         post.put()
         return
     else:
-        post = Post(pigeon_key=pigeon_key, house_key=house_key, content=content, number=1 )
+        post = Post(pigeon_key=pigeon_key, house_key=house_key, content=content, number=1, date_str='' )
+        post.put()
+        date2str = str(post.date)
+        str_list = date2str.split('.')
+        post.date_str = str_list[0]
         post.put()
         return
+
+
+    # pr.put()
+    # date2str = str(pr.date)
+    # str_list = date2str.split('.')
+    # pr.date_str = str_list[0]
+    # pr.put()
 
 def get_trending_subscription():
     house_list = House.query().fetch()
@@ -416,6 +435,19 @@ def get_single_house_2(house_name):
                    card_list)
     else:
         return
+
+def get_all_post(house_name):
+    house_list = House.query(House.name==house_name).fetch()
+    house_key = house_list[0].key
+    post_list = Post.query( Post.house_key==house_key ).fetch()
+    sorted( post_list, key = lambda p: p.number  )
+    return map(lambda p: {"user_id": p.pigeon_key.get().pigeon_id, "house_name": p.house_key.get().name,
+                          "number": p.number, "date": p.date_str, "content": p.content  },
+               post_list)
+
+
+
+
 
 
 

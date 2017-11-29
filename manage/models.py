@@ -51,3 +51,4 @@ class Post(ndb.Model):   #comment for a house
     content = ndb.StringProperty()
     number = ndb.IntegerProperty()
     date = ndb.DateTimeProperty(auto_now_add=True)
+    date_str = ndb.StringProperty()
