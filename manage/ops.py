@@ -305,10 +305,6 @@ def add_post(house_name, user_id, content):
         str_list = date2str.split('.')
         post.date_str = str_list[0]
         post.put()
-        date2str = str(post.date)
-        str_list = date2str.split('.')
-        post.date_str = str_list[0]
-        post.put()
         return
     else:
         post = Post(pigeon_key=pigeon_key, house_key=house_key, content=content, number=1, date_str='' )
