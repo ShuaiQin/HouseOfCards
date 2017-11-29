@@ -43,7 +43,7 @@ from SearchServiceHandlers import SearchCardServiceHandler
 
 import ops
 import study
-
+import random
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
@@ -53,16 +53,21 @@ class MainHandler(webapp2.RequestHandler):
 class ManageProfileServiceHandler(webapp2.RequestHandler):
     def get(self):
         user_id = self.request.get('user_id')
+        owned_house_list = []
+        subed_house_list = []
+
         if not ops.pigeon_exists(user_id):  # if no such user, return two empty lists
-            ops.create_pigeon(user_id)
-            owned_house_list = []
-            subed_house_list = []
+            avater_list = ['bee.png','bull.png','dolphin.png','duck.png','falcon.png','pigeon.png','rabbit.png','unicorn.png']
+            ops.create_pigeon(user_id,avater_list[random.randint(0,7)])
         else:
             owned_house_list = ops.get_self_house(user_id)
             subed_house_list = ops.get_sub_house(user_id)
+
+        avatar = ops.get_avatar(user_id)
         return_info = {
             'owned_house_list': owned_house_list,
-            'subed_house_list': subed_house_list
+            'subed_house_list': subed_house_list,
+            'avatar':avatar
         }
         self.response.content_type = 'text/html'
         self.response.write(json.dumps(return_info))
