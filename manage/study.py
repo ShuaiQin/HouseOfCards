@@ -67,11 +67,11 @@ class GetMultipleQuizHandler(webapp2.RequestHandler):
              the default multiple choices are 4, if number of cards < 4, multiple choices are the number
     """
     def get(self):
-        number_of_quiz = self.request.get('number_of_quiz')
+        number_of_quiz = int(self.request.get('number_of_quiz'))
         house_id = self.request.get('house_id')
 
         # all_cards is a list of dictionary
-        list_of_all_cards = ops.get_single_house(house_id)
+        list_of_all_cards = ops.get_single_house_2(house_id)
 
         # get a list of all values for future convenience
         list_of_all_values = []
@@ -126,11 +126,11 @@ class GetTrueFalseQuizHandler(webapp2.RequestHandler):
              the true/false probability is ~50% when data is quite large
     """
     def get(self):
-        number_of_quiz = self.request.get('number_of_quiz')
+        number_of_quiz = int(self.request.get('number_of_quiz'))
         house_id = self.request.get('house_id')
 
         # all_cards is a list of dictionary
-        list_of_all_cards = ops.get_single_house(house_id)
+        list_of_all_cards = ops.get_single_house_2(house_id)
 
         # get a list of all values for future convenience
         list_of_all_values = []
@@ -175,10 +175,10 @@ class MakeScheduleHandler(webapp2.RequestHandler):
     """
     def get(self):
         pigeon_id = self.request.get('pigeon_id')
-        number_of_key_per_day = self.request.get('number_of_key_per_day')
+        number_of_key_per_day = int(self.request.get('number_of_key_per_day'))
         house_id = self.request.get('house_id')
 
-        list_of_all_cards = ops.get_single_house(house_id)
+        list_of_all_cards = ops.get_single_house_2(house_id)
 
         # get the total card length
         total_cards = len(list_of_all_cards)
@@ -227,7 +227,7 @@ class ShowProgressHandler(webapp2.RequestHandler):
         house_id = self.request.get('house_id')
 
         # get all cards for generation of feed
-        list_of_all_cards = ops.get_single_house(house_id)
+        list_of_all_cards = ops.get_single_house_2(house_id)
 
         # each pigeon has a special familiar factor to each card, initial is 0
         list_of_familiar_factor = []
@@ -290,7 +290,7 @@ class GetTodayTaskHandler(webapp2.RequestHandler):
         # the number of key per day the pigeon want to learn is pre-set by user
         number_of_key_per_day = ops.get_num_per_day(pigeon_id, house_id)
         # get all cards for generation of feed
-        list_of_all_cards = ops.get_single_house(house_id)
+        list_of_all_cards = ops.get_single_house_2(house_id)
 
         # each pigeon has a special familiar factor to each card, initial is 0
         list_of_familiar_factor = []
@@ -365,7 +365,7 @@ class SetScheduleHandler(webapp2.RequestHandler):
     def get(self):
         pigeon_id = self.request.get('pigeon_id')
         house_id = self.request.get('house_id')
-        num_per_day = self.request.get('num_per_day')
+        num_per_day = int(self.request.get('num_per_day'))
         ops.set_schedule(pigeon_id, house_id, num_per_day)
 
 
@@ -381,7 +381,7 @@ class CheckScheduleFinishHandler(webapp2.RequestHandler):
         house_id = self.request.get('house_id')
 
         # get all cards for generation of feed
-        list_of_all_cards = ops.get_single_house(house_id)
+        list_of_all_cards = ops.get_single_house_2(house_id)
 
         # each pigeon has a special familiar factor to each card, initial is 0
         list_of_familiar_factor = []
