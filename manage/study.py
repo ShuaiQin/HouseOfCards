@@ -276,6 +276,8 @@ class ShowProgressHandler(webapp2.RequestHandler):
         # parametrize the approx day with average learn factor, because the familiar factor will decrease with time
         approx_day_left = approx_day_left / math.exp(- 1 / float(average_learn_factor))
 
+        approx_day_left = int(math.ceil(approx_day_left))
+
         return_info = {
             'num_of_unlearn_key': unlearn_count,
             'num_of_unfamiliar_key': unfamiliar_count,
@@ -327,23 +329,23 @@ class GetTodayTaskHandler(webapp2.RequestHandler):
         for i in range(number_of_cards):
             # TODO: which should be cron job set by 1 day (modify later)
             # the familiar factor is decreased due to Ebbinghaus forgetting curve equation
-            list_of_familiar_factor[i] = list_of_familiar_factor[i] * math.exp(-1 / list_of_learn_factor[i])
+            list_of_familiar_factor[i] = list_of_familiar_factor[i] * math.exp(-1 / float(list_of_learn_factor[i]))
             # fetch the words need review first, the number is limited by number of key per day
-            if 0.0 < list_of_familiar_factor[i] < 50.0 and count_of_review < number_of_key_per_day:
+            if 0 < list_of_familiar_factor[i] < 50 and count_of_review < number_of_key_per_day:
                 list_of_feed.append(i)
                 # we assume the user 100% learn that
                 # set the familiar factor to 100 (know it very well)
                 list_of_familiar_factor[i] = 100.0
                 count_of_review = count_of_review + 1
                 # learn factor gets increased due to multiple time learning
-                list_of_learn_factor[i] = list_of_learn_factor[i] * 2.0
+                list_of_learn_factor[i] = list_of_learn_factor[i] * 2
             # fetch the new words
-            elif list_of_familiar_factor[i] == 0.0 and count_of_new < number_of_key_per_day:
+            elif list_of_familiar_factor[i] == 0 and count_of_new < number_of_key_per_day:
                 list_of_feed.append(i)
                 list_of_familiar_factor[i] = 100.0
                 count_of_new = count_of_new + 1
                 # learn factor gets increased, the more time you review the less chance you forget it
-                list_of_learn_factor[i] = list_of_learn_factor[i] * 2.0
+                list_of_learn_factor[i] = list_of_learn_factor[i] * 2
 
         # set a count 1 -> 1 card
         count = 0
