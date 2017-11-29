@@ -115,6 +115,15 @@ def get_single_house(house_name):
     else:
         return
 
+def get_single_house_info(house_name):
+    house_list = House.query(House.name == house_name).fetch()
+    if house_list:
+        s = house_list[0]
+        return {"house_name": s.name, "cover_url": s.cover_url,
+         "category": s.category, "view": s.view,
+         "num_of_subed": s.num_of_subed}
+
+
 def get_house_owner(house_name):
     house_list = House.query(House.name == house_name).fetch()
     if house_list:
