@@ -173,7 +173,7 @@ def edit_card_key (house_name, card_key_str, new_card_key):
     value = card.value
 
     remove_card(house_name, card_key_str)
-    add_card(house_name, card_key_str, value)
+    add_card(house_name, new_card_key, value)
     return
 
 def edit_card_content (house_name, card_key_str, new_card_content):
@@ -207,7 +207,7 @@ def approve_pull_request(house_name, user_id, date):
     house_list = House.query(House.name==house_name).fetch()
     house_key = house_list[0].key
 
-    pr_list = PullRequest.query( PullRequest.pigeon_key==pigeon_key, PullRequest.house_keyhouse_key, PullRequest.date_str == date ).fetch()
+    pr_list = PullRequest.query( PullRequest.pigeon_key==pigeon_key, PullRequest.house_key==house_key, PullRequest.date_str == date ).fetch()
     if pr_list:
         pr = pr_list[0]
         if pr.mode=='add':
@@ -215,15 +215,15 @@ def approve_pull_request(house_name, user_id, date):
             pr.key.delete()
             return
         elif pr.mode=='remove':
-            remove_card(pr.house_key.get().name, pr.card_key.get().key)
+            remove_card(pr.house_key.get().name, pr.card_key.get().card_key)
             pr.key.delete()
             return
         elif pr.mode=='key':
-            edit_card_key(pr.house_key.get().name, pr.card_key.get().key, pr.new_key)
+            edit_card_key(pr.house_key.get().name, pr.card_key.get().card_key, pr.new_key)
             pr.key.delete()
             return
         elif pr.mode=='content':
-            edit_card_content(pr.house_key.get().name, pr.card_key.get().key, pr.new_value)
+            edit_card_content(pr.house_key.get().name, pr.card_key.get().card_key, pr.new_value)
             pr.key.delete()
             return
     else:
