@@ -37,6 +37,8 @@ from TrendingServiceHandlers import GetTrendingSubServiceHandler
 from TrendingServiceHandlers import GetTrendingViewServiceHandler
 from ViewHouseServiceHandler import ViewAllHousesServiceHandler
 from ViewHouseServiceHandler import ViewSingleHouseServiceHandler
+from SearchServiceHandlers import SearchHouseServiceHandler
+from SearchServiceHandlers import SearchCardServiceHandler
 
 import ops
 import study
@@ -89,6 +91,8 @@ service = webapp2.WSGIApplication([
     ('/service-trendingview',GetTrendingViewServiceHandler),
     ('/service-category',GetCategoryServiceHandler),
     ('/service-checksubscription', CheckSubscriptionServiceHandler),
+    ('/service-searchhouse',SearchHouseServiceHandler),
+    ('/service-searchcard',SearchCardServiceHandler),
     #
     ('/getmultiplequiz', study.GetMultipleQuizHandler),
     ('/gettruefalsequiz', study.GetTrueFalseQuizHandler),
