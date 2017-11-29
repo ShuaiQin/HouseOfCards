@@ -110,7 +110,7 @@ def get_single_house(house_name):
         house.view = house.view+1
         house.put()
         card_list = Card.query(ancestor=house.key).fetch()
-        return map(lambda s: {"key": s.key, "value": s.value},
+        return map(lambda s: {"key": s.card_key, "value": s.value},
                    card_list)
     else:
         return
@@ -119,7 +119,7 @@ def get_house_owner(house_name):
     house_list = House.query(House.name == house_name).fetch()
     if house_list:
         house = house_list[0]
-        id = house.key().parent().get().pigeon_id
+        id = house.key.parent().get().pigeon_id
     return id
 
 
@@ -193,8 +193,13 @@ def send_pull_request(user_id, house_name, mode, card_key, new_key, new_value):
     card_key = ndb.Key(Card, card_key, parent=house_key)
 
     pr = PullRequest(pigeon_key=pigeon_key, house_key=house_key, card_key=card_key,
-                     new_key=new_key, new_value=new_value, mode = mode)
+                     new_key=new_key, new_value=new_value, mode = mode, date_str='')
     pr.put()
+    date2str = str(pr.date)
+    str_list = date2str.split('.')
+    pr.date_str = str_list[0]
+    pr.put()
+
     return
 
 def approve_pull_request(house_name, user_id, date):
@@ -202,7 +207,7 @@ def approve_pull_request(house_name, user_id, date):
     house_list = House.query(House.name==house_name).fetch()
     house_key = house_list[0].key
 
-    pr_list = PullRequest.query( PullRequest.pigeon_key==pigeon_key, PullRequest.house_keyhouse_key, PullRequest.date == date ).fetch()
+    pr_list = PullRequest.query( PullRequest.pigeon_key==pigeon_key, PullRequest.house_keyhouse_key, PullRequest.date_str == date ).fetch()
     if pr_list:
         pr = pr_list[0]
         if pr.mode=='add':
@@ -229,7 +234,7 @@ def reject_pull_request(house_name, user_id, date):
     house_list = House.query(House.name==house_name).fetch()
     house_key = house_list[0].key
 
-    pr_list = PullRequest.query( PullRequest.pigeon_key==pigeon_key, PullRequest.house_key==house_key, PullRequest.date == date ).fetch()
+    pr_list = PullRequest.query( PullRequest.pigeon_key==pigeon_key, PullRequest.house_key==house_key, PullRequest.date_str == date ).fetch()
     if pr_list:
         pr = pr_list[0]
         pr.key.delete()
@@ -244,7 +249,7 @@ def show_all_pull_request(house_name):
     if pr_list:
         return map(lambda s: {"user_id": s.pigeon_key.get().pigeon_id, "mode": s.mode,
                               "newkey": s.new_key, "newcontent": s.new_value,
-                              "date": s.date},
+                              "date": s.date_str},
                    pr_list)
     else:
         return
@@ -255,8 +260,13 @@ def add_issue(user_id, house_name, card_key, content):
     house_key = house_list[0].key
     card_key = ndb.Key(Card, card_key,parent=house_key)
 
-    issue = Issue(pigeon_key=pigeon_key, house_key=house_key, card_key=card_key, comment=content )
+    issue = Issue(pigeon_key=pigeon_key, house_key=house_key, card_key=card_key, comment=content, date_str='' )
     issue.put()
+    date2str = str(issue.date)
+    str_list = date2str.split('.')
+    issue.date_str = str_list[0]
+    issue.put()
+
     return
 
 def show_all_issues(house_name):
@@ -265,7 +275,7 @@ def show_all_issues(house_name):
     issue_list = Issue.query(Issue.house_key==house_key).fetch()
     if issue_list:
         return map(lambda s: {"user_id": s.pigeon_key.get().pigeon_id, "content": s.comment,
-                              "date": s.date},
+                              "date": s.date_str},
                    issue_list)
     else:
         return
@@ -274,7 +284,7 @@ def resolve_issue(house_name, user_id, date):
     pigeon_key = ndb.Key(Pigeon, user_id)
     house_list = House.query(House.name==house_name).fetch()
     house_key = house_list[0].key
-    issue_list = Issue.query( Issue.pigeon_key==pigeon_key,Issue.house_key==house_key, Issue.date==date ).fetch()
+    issue_list = Issue.query( Issue.pigeon_key==pigeon_key,Issue.house_key==house_key, Issue.date_str==date ).fetch()
     if issue_list:
         issue = issue_list[0]
         issue.key.delete()
