@@ -384,7 +384,7 @@ def _initailize_progress(pigeon_key,card_key):
     return
 
 def _delete_progress(pigeon_key,card_key):
-    progress_list = Progress.query(Progress.pigeon_key==pigeon_key, Progress.card_key==card_key)
+    progress_list = Progress.query(Progress.pigeon_key==pigeon_key, Progress.card_key==card_key).fetch()
     if progress_list:
         progress = progress_list[0]
         progress.key.delete()
