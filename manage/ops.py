@@ -95,6 +95,8 @@ def get_sub_house(pigeon_id):
                               "category": s.category , "view": s.view,
                               "num_of_subed": s.num_of_subed},
                    house_list)
+    else:
+        return house_list
 
 def get_all_house():
     house_list = House.query().fetch()
