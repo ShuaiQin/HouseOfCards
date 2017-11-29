@@ -378,7 +378,8 @@ def get_familiar_factor(user_id, house_name, card_key_str):
     if progress_list:
         return progress_list[0].familiar_factor
     else:
-        return
+        _initailize_progress(pigeon_key, card_key)
+        return 0.0
 
 def set_familiar_factor(user_id, house_name, card_key_str, familiar_factor):
     pigeon_key = ndb.Key(Pigeon, user_id)
@@ -403,7 +404,8 @@ def get_learn_factor(user_id, house_name, card_key_str):
     if progress_list:
         return progress_list[0].learn_factor
     else:
-        return
+        _initailize_progress(pigeon_key, card_key)
+        return 1
 
 def set_learn_factor(user_id, house_name, card_key_str, learn_factor):
     pigeon_key = ndb.Key(Pigeon, user_id)
