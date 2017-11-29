@@ -12,14 +12,26 @@
             <div class="ui secondary menu">
                 <h3 class="item header">Learning</h3>
             </div>
-            <div class="ui card">
-                <div class="image">
-                    <img src="/static/b.png">
+            {% if subed_houses %}
+                <div class="ui card">
+                    <div class="image">
+                        <img src="{{ subed_houses[0]['cover_url'] }}">
+                    </div>
+                    <div class="content">
+                        <a class="header">{{ subed_houses[0]['house_name'] }}</a>
+                    </div>
                 </div>
-                <div class="content">
-                    <a class="header">Block</a>
+            {% else %}
+                <div class="ui card">
+                    <div class="image">
+                        <img src="{{ subed_houses[0]['cover_url'] }}">
+                    </div>
+                    <div class="content">
+                        <a class="header" href="/explore">To Subscribe to learn</a>
+                    </div>
                 </div>
-            </div>
+            {% endif %}
+
             <div class="ui secondary menu">
                 <h3 class="item header">News</h3>
             </div>
@@ -48,48 +60,46 @@
                 <h3 class="item header">Managing</h3>
                 <div class="right menu">
                     <div class="item">
-                        <button class="ui mini basic button">New House</button>
+                        <a href="/create" class="ui mini basic button">New House</a>
                     </div>
                 </div>
             </div>
             <div class="ui four cards">
-                <a class="ui link card" href="/house/aaa">
-                    <div class="image">
-                        <img src="/static/b.png">
-                    </div>
-                    <div class="content">
-                        <div class="header">aaa</div>
-                    </div>
-                </a>
-                <a class="ui link card" href="/house/aaa">
-                    <div class="image">
-                        <img src="/static/b.png">
-                    </div>
-                    <div class="content">
-                        <div class="header">aaa</div>
-                    </div>
-                </a>
-                <a class="ui link card" href="/house/aaa">
-                    <div class="image">
-                        <img src="/static/b.png">
-                    </div>
-                    <div class="content">
-                        <div class="header">aaa</div>
-                    </div>
-                </a>
+                {% if not owned_houses %}
+                    <a class="ui link card" href="/create">
+                        <div class="image">
+                            <img src="/static/small-plus.png">
+                        </div>
+                        <div class="content">
+                            <div class="header">Create House</div>
+                        </div>
+                    </a>
+                {% endif %}
+                {% for house in owned_houses %}
+                    <a class="ui link card" href="/house/{{ house['house_name'] }}">
+                        <div class="image">
+                            <img src="{{ house['cover_url'] }}">
+                        </div>
+                        <div class="content">
+                            <div class="header">{{ house['house_name'] }}</div>
+                        </div>
+                    </a>
+                {% endfor %}
             </div>
             <div class="ui secondary menu">
                 <h3 class="item header">Watching</h3>
             </div>
             <div class="ui four cards">
-                <div class="ui link card">
-                    <div class="image">
-                        <img src="/static/b.png">
-                    </div>
-                    <div class="content">
-                        <a class="header" href="/house/aaa">aaa</a>
-                    </div>
-                </div>
+                {% for house in subed_houses %}
+                    <a class="ui link card" href="/house/{{ house['house_name'] }}">
+                        <div class="image">
+                            <img src="{{ house['cover_url'] }}">
+                        </div>
+                        <div class="content">
+                            <div class="header">{{ house['house_name'] }}</div>
+                        </div>
+                    </a>
+                {% endfor %}
             </div>
         </div>
     </div>

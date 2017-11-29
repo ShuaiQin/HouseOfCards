@@ -36,12 +36,27 @@ class MainHandler(webapp2.RequestHandler):
             template_value['myself'] = user.email()
             template_value['logout_url'] = cfg.LOG_OUT_URL
             template_value['sign'] = True
+            data = self.rpc(user.email())
+            template_value['owned_houses'] = data['owned_house_list'][:4]
+            template_value['subed_houses'] = data['subed_house_list'][:4]
+
         else:
             template_value['login_url'] = cfg.LOG_IN_URL
             template_value['sign'] = False
 
         template = cfg.JINJA_ENVIRONMENT.get_template("index.html")
         self.response.write(template.render(template_value))
+
+    def rpc(self, user_id):
+        rpc = urlfetch.create_rpc()
+        request = {}
+        request['user_id'] = user_id
+        url = cfg.SERVICE_URL + "/service-manageprofile?" + urllib.urlencode(request)
+        print url
+        urlfetch.make_fetch_call(rpc, url)
+        response = rpc.get_result()
+        data = json.loads(response.content)
+        return data
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler),

@@ -2,65 +2,17 @@
     <h3 class="item header">Cards</h3>
     <div class="right menu">
         <div class="item">
-            <button class="ui mini basic button">Add Card</button>
+            <a class="ui mini basic button">Add Card</a>
         </div>
     </div>
 </div>
 <div class="ui three cards">
-    <div class="ui card">
-        <div class="content">
-            <div class="header">Dog</div>
-            <div class="description">
-                Many people also have their own barometers for what makes a cute dog.
+    {% for card in cards %}
+        <div class="ui card">
+            <div class="content">
+                <div class="header">{{ card['key'] }}</div>
+                <div class="description">{{ card['value'] }}</div>
             </div>
         </div>
-    </div>
-    <div class="ui card">
-        <div class="content">
-            <div class="header">Dog</div>
-            <div class="description">
-                Many people also have their own barometers for what makes a cute dog.
-            </div>
-        </div>
-    </div>
-    <div class="ui card">
-        <div class="content">
-            <div class="header">Dog</div>
-            <div class="description">
-                Many people also have their own barometers for what makes a cute dog.
-            </div>
-        </div>
-    </div>
-    <div class="ui card">
-        <div class="content">
-            <div class="header">Dog</div>
-            <div class="description">
-                Many people also have their own barometers for what makes a cute dog.
-            </div>
-        </div>
-    </div>
-    <div class="ui card">
-        <div class="content">
-            <div class="header">Dog</div>
-            <div class="description">
-                Many people also have their own barometers for what makes a cute dog.
-            </div>
-        </div>
-    </div>
-    <div class="ui card">
-        <div class="content">
-            <div class="header">Dog</div>
-            <div class="description">
-                Many people also have their own barometers for what makes a cute dog.
-            </div>
-        </div>
-    </div>
-    <div class="ui card">
-        <div class="content">
-            <div class="header">Dog</div>
-            <div class="description">
-                Many people also have their own barometers for what makes a cute dog.
-            </div>
-        </div>
-    </div>
+    {% endfor %}
 </div>
