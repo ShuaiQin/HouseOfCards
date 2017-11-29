@@ -42,6 +42,8 @@ Another Function:
 
 """
 
+# TODO: add a handler to get the length of list
+
 import json
 import math
 import random
@@ -72,6 +74,10 @@ class GetMultipleQuizHandler(webapp2.RequestHandler):
 
         # all_cards is a list of dictionary
         list_of_all_cards = ops.get_single_house_2(house_id)
+
+        # add a error preventing mechanism
+        if number_of_quiz > len(list_of_all_cards):
+            return
 
         # get a list of all values for future convenience
         list_of_all_values = []
@@ -131,6 +137,10 @@ class GetTrueFalseQuizHandler(webapp2.RequestHandler):
 
         # all_cards is a list of dictionary
         list_of_all_cards = ops.get_single_house_2(house_id)
+
+        # add a error preventing mechanism
+        if number_of_quiz > len(list_of_all_cards):
+            return
 
         # get a list of all values for future convenience
         list_of_all_values = []
@@ -460,6 +470,18 @@ class ForTest(webapp2.RequestHandler):
         self.response.write(json.dumps(return_info))
 
 
+class GetHouseSizeHandler(webapp2.RequestHandler):
+    def get(self):
+        house_id = self.request.get('house_id')
+        list_of_all_cards = ops.get_single_house_2(house_id)
+        size_of_house = len(list_of_all_cards)
+        return_info = {
+            'size_of_house': size_of_house
+        }
+        self.response.content_type = 'text/html'
+        self.response.write(json.dumps(return_info))
+
+
 service = webapp2.WSGIApplication([
     ('/', MainHandler),
     ('/getmultiplequiz', GetMultipleQuizHandler),
@@ -470,5 +492,7 @@ service = webapp2.WSGIApplication([
     ('/setschedule', SetScheduleHandler),
     ('/checkschedulefinish', CheckScheduleFinishHandler),
     ('/checkstudyornot', CheckStudyOrNotHandler),
-    ('/getschedule', GetScheduleHandler)
+    ('/getschedule', GetScheduleHandler),
+    ('/fortest', ForTest),
+    ('/gethousesize', GetHouseSizeHandler)
 ], debug=True)

@@ -97,5 +97,6 @@ service = webapp2.WSGIApplication([
     ('/checkschedulefinish', study.CheckScheduleFinishHandler),
     ('/checkstudyornot', study.CheckStudyOrNotHandler),
     ('/getschedule', study.GetScheduleHandler),
-    ('/fortest', study.ForTest)
+    ('/fortest', study.ForTest),
+    ('/gethousesize', study.GetHouseSizeHandler)
 ], debug=True)
