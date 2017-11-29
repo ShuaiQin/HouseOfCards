@@ -13,7 +13,7 @@ class SearchHouseServiceHandler(webapp2.RequestHandler):
         search_house_list = []
         if (search_string != ""):
             for house in all_house_list:
-                if (re.match(search_string, house['house_name'])):
+                if (re.match(".*"+search_string, house['house_name'])):
                     search_house_list.append(house)
         
         return_info = {
@@ -32,7 +32,7 @@ class SearchCardServiceHandler(webapp2.RequestHandler):
         all_card_list = ops.get_single_house(house_name)
         if (search_string!= ""):
             for card in all_card_list:
-                if (re.match(search_string, card['key'])):
+                if (re.match(".*"+search_string, card['key'])):
                     search_card_list.append(card)
 
         return_info = {
