@@ -43,7 +43,7 @@ def add_card(house_name,key,value):
         card.put()
     return
 
-def get_all_cards(house_name):
+def _get_all_cards(house_name):
     house_list = House.query(House.name==house_name).fetch()
     if house_list:
         house = house_list[0]
@@ -77,10 +77,16 @@ def create_subscription(pigeon_id, house_name):
 def delete_subscription(pigeon_id, house_name):
     pigeon_key = ndb.Key(Pigeon, pigeon_id)
     house_list = House.query(House.name==house_name).fetch()
-    house_key = house_list[0].key
+    house = house_list[0]
+    house_key = house.key
     sublist = Subscription.query( Subscription.pigeon_key==pigeon_key,Subscription.house_key==house_key ).fetch()
     if sublist:
-        sublist[0].key.delete()
+        sub = sublist[0]
+        sub.key.delete()
+        card_list = _get_all_cards(house_name)
+        for card in card_list:
+            _delete_progress(pigeon_key, card.key)
+        return
     else:
         return
 
@@ -367,6 +373,17 @@ def get_num_per_day(user_id, house_name):
 def _initailize_progress(pigeon_key,card_key):
     progress = Progress(pigeon_key=pigeon_key, card_key=card_key, familiar_factor=0, learn_factor=1)
     progress.put()
+    return
+
+def _delete_progress(pigeon_key,card_key):
+    progress_list = Progress.query(Progress.pigeon_key==pigeon_key, Progress.card_key==card_key)
+    if progress_list:
+        progress = progress_list[0]
+        progress.key.delete()
+        return
+    else:
+        return
+
 
 def set_schedule(user_id, house_name, num_per_day):
     pigeon_key = ndb.Key(Pigeon, user_id)
