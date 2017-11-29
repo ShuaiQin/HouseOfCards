@@ -148,49 +148,49 @@ def remove_all_sub(house_name):
         sub.key.delete()
     return
 
-def card_exists(house_name, card_key):
+def card_exists(house_name, card_key_str):
     house_list = House.query(House.name==house_name).fetch()
     house_key = house_list[0].key
-    card_key = ndb.Key(Card, card_key, parent=house_key)
+    card_key = ndb.Key(Card, card_key_str, parent=house_key)
     card = card_key.get()
     if card:
         return True
     else:
         return False
 
-def remove_card(house_name, card_key):
+def remove_card(house_name, card_key_str):
     house_list = House.query(House.name==house_name).fetch()
     house_key = house_list[0].key
-    card_key = ndb.Key(Card, card_key, parent=house_key)
+    card_key = ndb.Key(Card, card_key_str, parent=house_key)
     card_key.delete()
     return
 
-def edit_card_key (house_name, card_key, new_card_key):
+def edit_card_key (house_name, card_key_str, new_card_key):
     house_list = House.query(House.name==house_name).fetch()
     house_key = house_list[0].key
-    card_key = ndb.Key(Card, card_key, parent=house_key)
+    card_key = ndb.Key(Card, card_key_str, parent=house_key)
     card = card_key.get()
     value = card.value
 
-    remove_card(house_name, card_key)
-    add_card(house_name, card_key, value)
+    remove_card(house_name, card_key_str)
+    add_card(house_name, card_key_str, value)
     return
 
-def edit_card_content (house_name, card_key, new_card_content):
+def edit_card_content (house_name, card_key_str, new_card_content):
     house_list = House.query(House.name==house_name).fetch()
     house_key = house_list[0].key
-    card_key = ndb.Key(Card, card_key, parent=house_key)
+    card_key = ndb.Key(Card, card_key_str, parent=house_key)
     card = card_key.get()
 
     card.value = new_card_content
     card.put()
     return
 
-def send_pull_request(user_id, house_name, mode, card_key, new_key, new_value):
+def send_pull_request(user_id, house_name, mode, card_key_str, new_key, new_value):
     pigeon_key = ndb.Key(Pigeon, user_id)
     house_list = House.query(House.name==house_name).fetch()
     house_key = house_list[0].key
-    card_key = ndb.Key(Card, card_key, parent=house_key)
+    card_key = ndb.Key(Card, card_key_str, parent=house_key)
 
     pr = PullRequest(pigeon_key=pigeon_key, house_key=house_key, card_key=card_key,
                      new_key=new_key, new_value=new_value, mode = mode, date_str='')
@@ -254,11 +254,11 @@ def show_all_pull_request(house_name):
     else:
         return
 
-def add_issue(user_id, house_name, card_key, content):
+def add_issue(user_id, house_name, card_key_str, content):
     pigeon_key = ndb.Key(Pigeon, user_id)
     house_list = House.query(House.name==house_name).fetch()
     house_key = house_list[0].key
-    card_key = ndb.Key(Card, card_key,parent=house_key)
+    card_key = ndb.Key(Card, card_key_str,parent=house_key)
 
     issue = Issue(pigeon_key=pigeon_key, house_key=house_key, card_key=card_key, comment=content, date_str='' )
     issue.put()
@@ -354,22 +354,22 @@ def set_schedule(user_id, house_name, num_per_day):
     else:
         return
 
-def get_familiar_factor(user_id, house_name, card_key):
+def get_familiar_factor(user_id, house_name, card_key_str):
     pigeon_key = ndb.Key(Pigeon, user_id)
     house_list = House.query(House.name==house_name).fetch()
     house_key = house_list[0].key
-    card_key = ndb.Key(Card, card_key, parent=house_key)
+    card_key = ndb.Key(Card, card_key_str, parent=house_key)
     progress_list = Progress.query(Progress.pigeon_key==pigeon_key,Progress.card_key==card_key).fetch()
     if progress_list:
         return progress_list[0].familiar_factor
     else:
         return
 
-def set_familiar_factor(user_id, house_name, card_key, familiar_factor):
+def set_familiar_factor(user_id, house_name, card_key_str, familiar_factor):
     pigeon_key = ndb.Key(Pigeon, user_id)
     house_list = House.query(House.name==house_name).fetch()
     house_key = house_list[0].key
-    card_key = ndb.Key(Card, card_key, parent=house_key)
+    card_key = ndb.Key(Card, card_key_str, parent=house_key)
     progress_list = Progress.query(Progress.pigeon_key==pigeon_key,Progress.card_key==card_key).fetch()
     if progress_list:
         progress = progress_list[0]
@@ -379,22 +379,22 @@ def set_familiar_factor(user_id, house_name, card_key, familiar_factor):
     else:
         return
 
-def get_learn_factor(user_id, house_name, card_key):
+def get_learn_factor(user_id, house_name, card_key_str):
     pigeon_key = ndb.Key(Pigeon, user_id)
     house_list = House.query(House.name==house_name).fetch()
     house_key = house_list[0].key
-    card_key = ndb.Key(Card, card_key, parent=house_key)
+    card_key = ndb.Key(Card, card_key_str, parent=house_key)
     progress_list = Progress.query(Progress.pigeon_key==pigeon_key,Progress.card_key==card_key).fetch()
     if progress_list:
         return progress_list[0].learn_factor
     else:
         return
 
-def set_learn_factor(user_id, house_name, card_key, learn_factor):
+def set_learn_factor(user_id, house_name, card_key_str, learn_factor):
     pigeon_key = ndb.Key(Pigeon, user_id)
     house_list = House.query(House.name==house_name).fetch()
     house_key = house_list[0].key
-    card_key = ndb.Key(Card, card_key, parent=house_key)
+    card_key = ndb.Key(Card, card_key_str, parent=house_key)
     progress_list = Progress.query(Progress.pigeon_key==pigeon_key,Progress.card_key==card_key).fetch()
     if progress_list:
         progress = progress_list[0]
