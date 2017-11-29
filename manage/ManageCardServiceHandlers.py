@@ -32,9 +32,9 @@ class RemoveCardServiceHandler(webapp2.RequestHandler):
         delete_card_list = delete_card_string.split(',')
 
         for card in delete_card_list:
-            if ops.card_exists(card):
+            if ops.card_exists(house_name, card):
                 ops.remove_card(house_name, str(card))
-                #ops.remove_all_sub(str(card))
+
 
 class EditCardServiceHandler(webapp2.RequestHandler):
     def get(self):
