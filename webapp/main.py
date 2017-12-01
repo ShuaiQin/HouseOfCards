@@ -68,5 +68,5 @@ app = webapp2.WSGIApplication([
     ('/house/(\w+)', HousePage, 'name'),
     ('/create', CreatePage),
     ('/create-pr/(\w+)', PrFormHandler, 'name'),
-    ('/resolve-pr/(\w+)/(\w+)/(\w+)', PrResolveHandler, ('name', 'date', 'decision'))
+    ('/resolve-pr/(\w+)/([^/]+)/(\w+)', PrResolveHandler, ('name', 'date', 'decision'))
 ], debug=True)

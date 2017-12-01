@@ -6,6 +6,16 @@
         </div>
     </div>
 </div>
+<div class="page-create-form ui segment" style="display: none; width: 97%; margin-left: 1.5%">
+    <form class="ui form" method="post" action="/create-post/{{ house }}">
+            <div class="field">
+                <label>Post</label>
+                <input type="text" name="new_key" placeholder=Content">
+            </div>
+        <input class="ui basic blue button" type="submit" value="Create">
+        <a class="ui basic black button" onclick="hideform()">Cancel</a>
+    </form>
+</div>
 <div class="ui small comments">
     <div class="comment">
         <a class="avatar">

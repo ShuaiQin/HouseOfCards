@@ -10,13 +10,13 @@
 
     function showform() {
         $(document).ready(function () {
-            $(".pr-create-form").show();
+            $(".page-create-form").show();
         })
     }
 
     function hideform() {
         $(document).ready(function () {
-            $(".pr-create-form").hide();
+            $(".page-create-form").hide();
         })
     }
 
@@ -26,7 +26,7 @@
         ;
     });
 </script>
-<div class="pr-create-form ui segment" style="display: none; width: 97%; margin-left: 1.5%">
+<div class="page-create-form ui segment" style="display: none; width: 97%; margin-left: 1.5%">
     <form class="ui form" method="post" action="/create-pr/{{ house }}">
         <div class="two fields">
             <div class="field">
@@ -81,16 +81,24 @@
                 <div class="header">{{ pr['mode'] }}</div>
                 <div class="meta">{{ pr['date'] }}</div>
                 <div class="description">
-                    Key: {{ pr['newkey'] }}, Content: {{ pr['newcontent'] }}
+                    {% if pr['mode'] == 'add' %}
+                        Key: {{ pr['newkey'] }}, Content: {{ pr['newcontent'] }}
+                    {% elif pr['mode'] == 'remove' %}
+                        Key: {{ pr['card_key'] }}
+                    {% elif pr['mode'] == 'key' %}
+                        Key: {{ pr['card_key'] }}, New Key: {{ pr['newkey'] }}
+                    {% else %}
+                        Key: {{ pr['card_key'] }}, New Content: {{ pr['newcontent'] }}
+                    {% endif %}
                 </div>
             </div>
             {% if is_owned %}
                 <div class="extra content" style="display: none">
                     <div class="ui two buttons">
                         <a class="ui basic green button"
-                             href="/resolve-pr/{{ house }}/{{ pr['date'] }}/approve">Approve</a>
+                           href="/resolve-pr/{{ house }}/{{ pr['date'] }}/approve">Approve</a>
                         <a class="ui basic red button"
-                            href="/resolve-pr/{{ house }}/{{ pr['date'] }}/approve">Decline</a>
+                           href="/resolve-pr/{{ house }}/{{ pr['date'] }}/reject">Decline</a>
                     </div>
                 </div>
             {% endif %}
