@@ -2,26 +2,40 @@
     <h3 class="item header">Comments</h3>
     <div class="right menu">
         <div class="item">
-            <button class="ui mini basic button">Add Comments</button>
+            <button class="ui mini basic button" onclick="showform()">Add Comments</button>
         </div>
     </div>
 </div>
+<div class="page-create-form ui segment" style="display: none; width: 97%; margin-left: 1.5%">
+    <form class="ui form" method="post" action="/create-post/{{ house }}">
+        <div class="field">
+            <label>Post</label>
+            <input type="text" name="content" placeholder=Content">
+        </div>
+        <input class="ui basic teal button" type="submit" value="Create">
+        <a class="ui basic black button" onclick="hideform()">Cancel</a>
+    </form>
+</div>
 <div class="ui small comments">
-    <div class="comment">
-        <a class="avatar">
-            <img src="/static/pigeon.png">
-        </a>
-        <div class="content">
-            <a class="author">Pigeon 1</a>
-            <div class="metadata">
-                <span class="date">Today at 5:42PM</span>
-            </div>
-            <div class="text">
-                How artistic!
-            </div>
-            <div class="actions">
-                <a class="reply">Reply</a>
+    {% for post in posts %}
+        <div class="comment">
+            <a class="avatar">
+                {% if 'avatar' in post %}
+                    <img src="/static/{{ post['avatar'] }}">
+                {% else %}
+                    <img src="/static/pigeon.png">
+                {% endif %}
+            </a>
+            <div class="content">
+                <a class="author">{{ post['user_id'] }}</a>
+                <div class="metadata">
+                    #[{{ post['number'] }}]
+                    <span class="date">{{ post['date'] }}</span>
+                </div>
+                <div class="text">
+                    {{ post['content'] }}
+                </div>
             </div>
         </div>
-    </div>
+    {% endfor %}
 </div>

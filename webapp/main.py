@@ -68,5 +68,8 @@ app = webapp2.WSGIApplication([
     ('/house/(\w+)', HousePage, 'name'),
     ('/create', CreatePage),
     ('/create-pr/(\w+)', PrFormHandler, 'name'),
-    ('/resolve-pr/(\w+)/(\w+)/(\w+)', PrResolveHandler, ('name', 'date', 'decision'))
+    ('/resolve-pr/(\w+)/([^/]+)/(\w+)/([^/]+)', PrResolveHandler, ('name', 'date', 'decision', 'user_id')),
+    ('/create-post/(\w+)', PostFormHandler, 'name'),
+    ('/create-issue/(\w+)', IssueFormHandler, 'name'),
+    ('/resolve-issue/(\w+)/([^/]+)/([^/]+)', IssueResolveHandler, ('name', 'date', 'decision'))
 ], debug=True)

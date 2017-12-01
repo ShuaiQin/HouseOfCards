@@ -2,17 +2,40 @@
     <h3 class="item header">Issues</h3>
     <div class="right menu">
         <div class="item">
-            <button class="ui mini basic button">Add Issue</button>
+            <button class="ui mini basic button" onclick="showform()">Add Issue</button>
         </div>
     </div>
 </div>
-<div class="ui one cards">
-    <div class="ui card">
-        <div class="content">
-            <div class="header">Issue #1</div>
-            <div class="description">
-                Wrong Wrong Wrong.
-            </div>
+<div class="page-create-form ui segment" style="display: none; width: 97%; margin-left: 1.5%">
+    <form class="ui form" method="post" action="/create-issue/{{ house }}">
+        <div class="field">
+            <label>Card Key</label>
+            <input type="text" name="card_key" placeholder="Card Key">
         </div>
-    </div>
+        <div class="field">
+            <label>Content</label>
+            <input type="text" name="content" placeholder=Content">
+        </div>
+        <input class="ui basic teal button" type="submit" value="Create">
+        <a class="ui basic black button" onclick="hideform()">Cancel</a>
+    </form>
+</div>
+<div class="ui one cards">
+    {% for issue in issues %}
+        <div class="ui card">
+            <div class="content">
+                <div class="header">Issue</div>
+                <div class="meta">by {{ issue['user_id'] }}</div>
+                <div class="description">
+                    {{ issue['content'] }}
+                </div>
+            </div>
+            {% if is_owned %}
+                <div class="extra content" style="display: none">
+                        <a class="ui fluid basic green button"
+                           href="/resolve-issue/{{ house }}/{{ issue['date'] }}/{{ issue['user_id'] }}">Resolve</a>
+                </div>
+            {% endif %}
+        </div>
+    {% endfor %}
 </div>
