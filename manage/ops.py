@@ -272,6 +272,7 @@ def show_all_pull_request(house_name):
     house_key = house_list[0].key
     pr_list = PullRequest.query(PullRequest.house_key==house_key).fetch()
     if pr_list:
+        #print pr_list
         return map(lambda s: {"user_id": s.pigeon_key.get().pigeon_id, "mode": s.mode,
                               "newkey": s.new_key, "newcontent": s.new_value,
                               "date": s.date_str, "card_key": s.card_key.get().card_key},

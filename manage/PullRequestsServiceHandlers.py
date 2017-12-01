@@ -13,7 +13,17 @@ class CreatePullRequestServiceHandler(webapp2.RequestHandler):
         card_key = self.request.get("card_key")
         new_key = self.request.get("new_key")
         new_value = self.request.get("new_value")
-        ops.send_pull_request(user_id, house_name, mode, card_key, new_key, new_value)
+        if mode=="add" or ops.card_exists(house_name,card_key):
+            ops.send_pull_request(user_id, house_name, mode, card_key, new_key, new_value)
+            return_info = {
+                'status': True,
+            }
+            self.response.write(json.dumps(return_info))
+        else:
+            return_info = {
+                'status': False,
+            }
+            self.response.write(json.dumps(return_info))
 
 
 class ShowAllPullRequestServiceHandler(webapp2.RequestHandler):
