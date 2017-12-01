@@ -17,7 +17,7 @@
     </div>
     <div class="row"></div>
     <div class="ui eleven wide column">
-        <form class="ui form">
+        <form class="ui form" method="post" action="/create">
             <div class="two fields">
                 <div class="field">
                     <label>House Name</label>
@@ -26,9 +26,9 @@
                 <div class="field">
                     <label>Category</label>
                     <div class="ui selection dropdown">
+                        <input type="hidden" name="category">
                         <div class="default text">Select</div>
                         <i class="dropdown icon"></i>
-                        <input type="hidden" name="gender">
                         <div class="menu">
                             <div class="item" data-value="fl">Foreign Language</div>
                             <div class="item" data-value="history">History</div>
@@ -36,10 +36,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="field">
-                <label>Description (Optional)</label>
-                <input type="text" name="description" placeholder="Optional">
             </div>
             <div class="field">
                 <label>Cover Url</label>

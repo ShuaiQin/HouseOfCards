@@ -25,6 +25,7 @@ from handlers.StudyPage import *
 from handlers.PigeonPage import *
 from handlers.HousePage import *
 from handlers.CreatePage import *
+from handlers.FormPage import *
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
@@ -65,5 +66,7 @@ app = webapp2.WSGIApplication([
     ('/study', StudyPage),
     ('/pigeon/(\w+)', PigeonPage, 'id'),
     ('/house/(\w+)', HousePage, 'name'),
-    ('/create', CreatePage)
+    ('/create', CreatePage),
+    ('/create-pr/(\w+)', PrFormHandler, 'name'),
+    ('/resolve-pr/(\w+)/(\w+)/(\w+)', PrResolveHandler, ('name', 'date', 'decision'))
 ], debug=True)

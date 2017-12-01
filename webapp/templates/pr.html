@@ -2,9 +2,65 @@
     <h3 class="item header">Issues</h3>
     <div class="right menu">
         <div class="item">
-            <button class="ui mini basic button">New Pull Request</button>
+            <button class="ui basic teal button" onclick="showform()">New Pull Request</button>
         </div>
     </div>
+</div>
+<script>
+
+    function showform() {
+        $(document).ready(function () {
+            $(".pr-create-form").show();
+        })
+    }
+
+    function hideform() {
+        $(document).ready(function () {
+            $(".pr-create-form").hide();
+        })
+    }
+
+    $(document).ready(function () {
+        $('.selection.dropdown')
+            .dropdown()
+        ;
+    });
+</script>
+<div class="pr-create-form ui segment" style="display: none; width: 97%; margin-left: 1.5%">
+    <form class="ui form" method="post" action="/create-pr/{{ house }}">
+        <div class="two fields">
+            <div class="field">
+                <label>Mode</label>
+                <div class="ui selection dropdown">
+                    <input type="hidden" name="mode">
+                    <div class="default text">Select a mode</div>
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <div class="item" data-value="add">Add</div>
+                        <div class="item" data-value="remove">Remove</div>
+                        <div class="item" data-value="key">Key</div>
+                        <div class="item" data-value="content">Content</div>
+                    </div>
+                </div>
+            </div>
+            <div class="field">
+                <label>Card Key</label>
+                <input type="text" name="card_key" placeholder="Card Key">
+            </div>
+        </div>
+        <div class="two fields">
+            <div class="field">
+                <label>New Key</label>
+                <input type="text" name="new_key" placeholder="New Key">
+            </div>
+            <div class="field">
+                <label>New Content</label>
+                <input type="text" name="new_value" placeholder="New Content">
+            </div>
+        </div>
+        <input class="ui basic blue button" type="submit" value="Create">
+        <a class="ui basic black button" onclick="hideform()">Cancel</a>
+    </form>
 </div>
 <script>
     $(document).ready(function () {
@@ -19,32 +75,25 @@
     })
 </script>
 <div class="ui one cards">
-    <div class="ui card">
-        <div class="content">
-            <div class="header">Pull Request #1</div>
-            <div class="description">
-                New Card.
+    {% for pr in prs %}
+        <div class="ui card">
+            <div class="content">
+                <div class="header">{{ pr['mode'] }}</div>
+                <div class="meta">{{ pr['date'] }}</div>
+                <div class="description">
+                    Key: {{ pr['newkey'] }}, Content: {{ pr['newcontent'] }}
+                </div>
             </div>
+            {% if is_owned %}
+                <div class="extra content" style="display: none">
+                    <div class="ui two buttons">
+                        <a class="ui basic green button"
+                             href="/resolve-pr/{{ house }}/{{ pr['date'] }}/approve">Approve</a>
+                        <a class="ui basic red button"
+                            href="/resolve-pr/{{ house }}/{{ pr['date'] }}/approve">Decline</a>
+                    </div>
+                </div>
+            {% endif %}
         </div>
-        <div class="extra content" style="display: none">
-            <div class="ui two buttons">
-                <div class="ui basic green button">Approve</div>
-                <div class="ui basic red button">Decline</div>
-            </div>
-        </div>
-    </div>
-    <div class="ui card">
-        <div class="content">
-            <div class="header">Pull Request #1</div>
-            <div class="description">
-                Wrong Wrong Wrong.
-            </div>
-        </div>
-        <div class="extra content" style="display: none">
-            <div class="ui two buttons">
-                <div class="ui basic green button">Approve</div>
-                <div class="ui basic red button">Decline</div>
-            </div>
-        </div>
-    </div>
+    {% endfor %}
 </div>
