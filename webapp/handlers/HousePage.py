@@ -24,9 +24,17 @@ class HousePage(webapp2.RequestHandler):
                 template_value['is_subed'] = data['is_subed']
                 template_value['house_info'] = data['house_info']
 
+            data = self.issue_rpc(name)
+            if data:
+                template_value['issues'] = data
+
             data = self.pr_rpc(name)
             if data:
                 template_value['prs'] = data
+
+            data = self.post_rpc(name)
+            if data:
+                template_value['posts'] = data
 
             template = cfg.JINJA_ENVIRONMENT.get_template("house.html")
             self.response.write(template.render(template_value))
@@ -46,6 +54,23 @@ class HousePage(webapp2.RequestHandler):
         data = json.loads(response.content)
         return data
 
+
+    def issue_rpc(self, house_name):
+        rpc = urlfetch.create_rpc()
+        request = {
+            'house_name': house_name
+        }
+        url = cfg.SERVICE_URL + "/service-showissues?" + urllib.urlencode(request)
+        print url
+        urlfetch.make_fetch_call(rpc, url)
+        response = rpc.get_result()
+        if response.status_code == 200:
+            data = json.loads(response.content)
+            return data["issue_list"]
+        else:
+            return None
+
+
     def pr_rpc(self, house_name):
         rpc = urlfetch.create_rpc()
         request = {
@@ -55,5 +80,23 @@ class HousePage(webapp2.RequestHandler):
         print url
         urlfetch.make_fetch_call(rpc, url)
         response = rpc.get_result()
-        data = json.loads(response.content)
-        return data["pull_request_list"]
+        if response.status_code == 200:
+            data = json.loads(response.content)
+            return data["pull_request_list"]
+        else:
+            return None
+
+    def post_rpc(self, house_name):
+        rpc = urlfetch.create_rpc()
+        request = {
+            'house_name': house_name
+        }
+        url = cfg.SERVICE_URL + "/service-getpost?" + urllib.urlencode(request)
+        print url
+        urlfetch.make_fetch_call(rpc, url)
+        response = rpc.get_result()
+        if response.status_code == 200:
+            data = json.loads(response.content)
+            return data["posts"]
+        else:
+            return None

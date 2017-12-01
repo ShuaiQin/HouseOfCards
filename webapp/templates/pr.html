@@ -1,5 +1,5 @@
 <div class="ui secondary menu">
-    <h3 class="item header">Issues</h3>
+    <h3 class="item header">Pull Requests</h3>
     <div class="right menu">
         <div class="item">
             <button class="ui basic teal button" onclick="showform()">New Pull Request</button>
@@ -58,7 +58,7 @@
                 <input type="text" name="new_value" placeholder="New Content">
             </div>
         </div>
-        <input class="ui basic blue button" type="submit" value="Create">
+        <input class="ui basic teal button" type="submit" value="Create">
         <a class="ui basic black button" onclick="hideform()">Cancel</a>
     </form>
 </div>
@@ -96,9 +96,9 @@
                 <div class="extra content" style="display: none">
                     <div class="ui two buttons">
                         <a class="ui basic green button"
-                           href="/resolve-pr/{{ house }}/{{ pr['date'] }}/approve">Approve</a>
+                           href="/resolve-pr/{{ house }}/{{ pr['date'] }}/approve/{{ pr['user_id'] }}">Approve</a>
                         <a class="ui basic red button"
-                           href="/resolve-pr/{{ house }}/{{ pr['date'] }}/reject">Decline</a>
+                           href="/resolve-pr/{{ house }}/{{ pr['date'] }}/reject/{{ pr['user_id'] }}">Decline</a>
                     </div>
                 </div>
             {% endif %}
