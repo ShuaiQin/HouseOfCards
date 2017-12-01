@@ -1,0 +1,12 @@
+indexes:
+- kind: PullRequest
+  ancestor: yes
+  properties:
+  - name: house_key
+  - name: date
+
+
+- kind: Issue
+  properties:
+  - name: house_key
+  - name: date

@@ -270,11 +270,12 @@ def reject_pull_request(house_name, user_id, date):
 def show_all_pull_request(house_name):
     house_list = House.query(House.name==house_name).fetch()
     house_key = house_list[0].key
-    pr_list = PullRequest.query(PullRequest.house_key==house_key).fetch()
+    pr_list = PullRequest.query(PullRequest.house_key==house_key).order(PullRequest.date).fetch()
     if pr_list:
+        #print pr_list
         return map(lambda s: {"user_id": s.pigeon_key.get().pigeon_id, "mode": s.mode,
                               "newkey": s.new_key, "newcontent": s.new_value,
-                              "date": s.date_str, "card_key": s.card_key.get().card_key},
+                              "date": s.date_str, "card_key": s.card_key.id()},
                    pr_list)
     else:
         return
@@ -297,7 +298,7 @@ def add_issue(user_id, house_name, card_key_str, content):
 def show_all_issues(house_name):
     house_list = House.query(House.name==house_name).fetch()
     house_key = house_list[0].key
-    issue_list = Issue.query(Issue.house_key==house_key).fetch()
+    issue_list = Issue.query(Issue.house_key==house_key).order(Issue.date).fetch()
     if issue_list:
         return map(lambda s: {"user_id": s.pigeon_key.get().pigeon_id, "content": s.comment,
                               "date": s.date_str},
