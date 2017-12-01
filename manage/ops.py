@@ -274,7 +274,7 @@ def show_all_pull_request(house_name):
     if pr_list:
         return map(lambda s: {"user_id": s.pigeon_key.get().pigeon_id, "mode": s.mode,
                               "newkey": s.new_key, "newcontent": s.new_value,
-                              "date": s.date_str},
+                              "date": s.date_str, "card_key": s.card_key.get().card_key},
                    pr_list)
     else:
         return
