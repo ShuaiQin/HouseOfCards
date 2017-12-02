@@ -26,10 +26,12 @@
         <img src="/static/pigeon.png" style="padding-right: 5px">House Of Cards
     </a>
     <div class="item">
-        <div class="ui icon input">
-            <i class="search icon"></i>
-            <input type="text" placeholder="Search">
-        </div>
+        <form action="/search" method="get">
+            <div class="ui icon input">
+                <i class="search icon"></i>
+                <input type="text" name="query" placeholder="Search">
+            </div>
+        </form>
     </div>
 
     <div class="right menu">
@@ -37,21 +39,21 @@
         <a class="item nav-item" href="/study">Study</a>
         <a class="item nav-item">Mobile App</a>
         {% if sign %}
-        <div class="ui dropdown item">
-            Login as <b style="padding-left: 5px">{{ myself }}</b>
-            <i class="dropdown icon"></i>
-            <div class="menu">
-                <a class="item" href="/pigeon/TestMyAccount">Your Profile</a>
-                <div class="item">Your Progress</div>
-                <div class="divider"></div>
-                <div class="item">Premium</div>
-                <div class="item">Help</div>
-                <div class="item">Setting</div>
+            <div class="ui dropdown item">
+                Login as <b style="padding-left: 5px">{{ myself }}</b>
+                <i class="dropdown icon"></i>
+                <div class="menu">
+                    <a class="item" href="/pigeon/TestMyAccount">Your Profile</a>
+                    <div class="item">Your Progress</div>
+                    <div class="divider"></div>
+                    <div class="item">Premium</div>
+                    <div class="item">Help</div>
+                    <div class="item">Setting</div>
+                </div>
             </div>
-        </div>
-        <a class="item" href="{{ logout_url }}"><i class="sign out icon"></i>Sign Out</a>
+            <a class="item" href="{{ logout_url }}"><i class="sign out icon"></i>Sign Out</a>
         {% else %}
-        <a class="item" href="{{ login_url }}"><i class="sign in icon"></i>Sign In</a>
+            <a class="item" href="{{ login_url }}"><i class="sign in icon"></i>Sign In</a>
         {% endif %}
     </div>
 </div>
