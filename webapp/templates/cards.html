@@ -1,6 +1,20 @@
 <div class="ui secondary menu">
     <h3 class="item header">Cards</h3>
     <div class="right menu">
+        {% if issearch %}
+            <div class="item">
+                <a class="ui mini basic button" href="/house/{{ house }}">{{ query }}</a>
+            </div>
+        {% else %}
+            <div class="item">
+                <form action="/house/{{ house }}" method="get">
+                    <div class="ui icon input">
+                        <i class="search icon"></i>
+                        <input type="text" name="query" placeholder="Search Card">
+                    </div>
+                </form>
+            </div>
+        {% endif %}
         <div class="item">
             <a class="ui mini basic button">Add Card</a>
         </div>

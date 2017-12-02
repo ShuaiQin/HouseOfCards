@@ -1,0 +1,39 @@
+{% include 'header.html' %}
+<div class="ui two column centered grid">
+    <div class="row"></div>
+    <div class="row">
+        <div class="thirteen wide column">
+            <h1 class="header">
+                Search the world of cards!
+            </h1>
+        </div>
+    </div>
+    <div class="row"></div>
+    <div class="row">
+        <div class="ui thirteen wide column">
+            <div class="ui secondary menu">
+                <h3 class="item header">Search Result</h3>
+                <div class="right menu">
+                    <div class="item">
+                        <a class="ui mini basic button" href="/create">New House</a>
+                    </div>
+                </div>
+            </div>
+            <div class="ui five cards">
+                {% for house in houses %}
+                    <div class="ui card">
+                        <div class="image">
+                            <img src="{{ house['cover_url'] }}">
+                        </div>
+                        <div class="content">
+                            <a class="header" href="/house/{{ house['house_name'] }}">{{ house['house_name'] }}</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+    <div class="row"></div>
+</div>
+{% include 'footer.html' %}
