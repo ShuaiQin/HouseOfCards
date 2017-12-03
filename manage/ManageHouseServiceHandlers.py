@@ -40,4 +40,43 @@ class RemoveHouseServiceHandler(webapp2.RequestHandler):
                 ops.remove_all_sub(str(house))
                 ops.remove_house(str(house))
 
+class GetPostForUserHandler(webapp2.RequestHandler):
+    def get(self):
+        user_id = self.request.get('user_id')
+        post_list = []
+        house_list = ops.get_self_house(user_id)   # list of dic
+        for house in house_list:
+            post_list = post_list + ops.get_all_post( house['house_name'] )    # house is a dic
 
+        sorted_list = sorted(post_list, key=lambda h: h['date'], reverse=True)
+        if len(sorted_list)>5:
+            return_info = {
+                'posts': sorted_list[0:5]
+            }
+            self.response.write(json.dumps(return_info))
+        else:
+            return_info = {
+                'posts': sorted_list
+            }
+            self.response.write(json.dumps(return_info))
+
+class GetHouseNumberForCato(webapp2.RequestHandler):
+    def get(self):
+        categories_key = [
+            "art", "geo", "his",
+            "lan", "lit", "phi",
+            "the", "ant", "eco",
+            "law", "pol", "psy",
+            "soc", "bio", "che",
+            "ear", "spa", "phy",
+            "com", "mat", "sta",
+            "eng", "hea", "oth"
+        ]
+        res = {}
+        for key in categories_key:
+            res[key] = len(ops.get_category(key))
+
+        return_info = {
+            'Catogory': res
+        }
+        self.response.write(json.dumps(return_info))
