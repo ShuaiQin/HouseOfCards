@@ -4,7 +4,7 @@ import webapp2
 
 import config.config as cfg
 
-import json
+import json, csv
 import urllib
 
 
@@ -101,3 +101,55 @@ class IssueResolveHandler(webapp2.RequestHandler):
         urlfetch.make_fetch_call(rpc, url)
         response = rpc.get_result()
         self.redirect('/house/' + name)
+
+
+class DeleteHouseHandler(webapp2.RequestHandler):
+    def get(self, name):
+        form_fields = {
+            'delete_house_string': name
+        }
+
+        form_data = urllib.urlencode(form_fields)
+
+        rpc = urlfetch.create_rpc()
+        url = cfg.SERVICE_URL + "/service-removehouse?" + form_data
+        print url
+        urlfetch.make_fetch_call(rpc, url)
+        response = rpc.get_result()
+        self.redirect('/')
+
+
+class AddCardHandler(webapp2.RequestHandler):
+    def uploadCard(self, name, key, content):
+        card_fields = {
+            'card_key': key,
+            'card_value': content,
+            'house_name': name
+        }
+
+        rpc = urlfetch.create_rpc()
+        url = cfg.SERVICE_URL + "/service-addcard?" + urllib.urlencode(card_fields)
+        print url
+        urlfetch.make_fetch_call(rpc, url)
+        response = rpc.get_result()
+        return
+
+
+    def post(self, name):
+
+        f = self.request.POST.get('upload_csv')
+        print f
+        if f != None:
+            print 1
+            csv_reader = csv.reader(f.file)
+            for row in csv_reader:
+                self.uploadCard(name, row[0], row[1])
+        else:
+            key = self.request.get('card_key')
+            content = self.request.get('content')
+            if key and content:
+                self.uploadCard(name, key, content)
+        self.redirect('/house/' + name)
+
+
+

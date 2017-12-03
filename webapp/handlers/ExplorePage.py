@@ -5,7 +5,6 @@ import webapp2
 import config.config as cfg
 
 import json
-import urllib2
 
 
 class ExplorePage(webapp2.RequestHandler):

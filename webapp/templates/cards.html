@@ -1,10 +1,48 @@
 <div class="ui secondary menu">
     <h3 class="item header">Cards</h3>
     <div class="right menu">
+        {% if issearch %}
+            <div class="item">
+                <a class="ui basic icon button" href="/house/{{ house }}">
+                    {{ query }}
+                    <i class="remove icon"></i>
+                </a>
+            </div>
+        {% else %}
+            <div class="item">
+                <form action="/house/{{ house }}" method="get">
+                    <div class="ui icon input">
+                        <i class="search icon"></i>
+                        <input type="text" name="query" placeholder="Search Card">
+                    </div>
+                </form>
+            </div>
+        {% endif %}
         <div class="item">
-            <a class="ui mini basic button">Add Card</a>
+            <button class="ui mini teal basic button" onclick="showform()">Add Card</button>
         </div>
     </div>
+</div>
+<div class="page-create-form ui segment" style="display: none; width: 97%; margin-left: 1.5%">
+    <form class="ui form" method="post" enctype="multipart/form-data" action="/add-card/{{ house }}" name="add-card">
+        <div class="field">
+            <label>Card Key</label>
+            <input type="text" name="card_key" placeholder="Card Key">
+        </div>
+        <div class="field">
+            <label>Content</label>
+            <input type="text" name="content" placeholder=Content">
+        </div>
+        <div class="ui horizontal divider">
+            Or
+        </div>
+        <div class="field">
+            <label>Upload .csv file</label>
+            <input type="file" name="upload_csv" accept=".csv"/>
+        </div>
+        <input class="ui basic teal button" type="submit" value="Add">
+        <a class="ui basic black button" onclick="hideform()">Cancel</a>
+    </form>
 </div>
 <div class="ui three cards">
     {% for card in cards %}

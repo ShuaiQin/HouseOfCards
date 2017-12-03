@@ -26,6 +26,7 @@ from handlers.PigeonPage import *
 from handlers.HousePage import *
 from handlers.CreatePage import *
 from handlers.FormPage import *
+from handlers.SearchPage import *
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
@@ -71,5 +72,8 @@ app = webapp2.WSGIApplication([
     ('/resolve-pr/(\w+)/([^/]+)/(\w+)/([^/]+)', PrResolveHandler, ('name', 'date', 'decision', 'user_id')),
     ('/create-post/(\w+)', PostFormHandler, 'name'),
     ('/create-issue/(\w+)', IssueFormHandler, 'name'),
-    ('/resolve-issue/(\w+)/([^/]+)/([^/]+)', IssueResolveHandler, ('name', 'date', 'decision'))
+    ('/resolve-issue/(\w+)/([^/]+)/([^/]+)', IssueResolveHandler, ('name', 'date', 'decision')),
+    ('/search', SearchPage),
+    ('/delete-house/(\w+)', DeleteHouseHandler, 'name'),
+    ('/add-card/(\w+)', AddCardHandler, 'name')
 ], debug=True)

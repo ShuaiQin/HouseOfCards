@@ -23,6 +23,15 @@ class HousePage(webapp2.RequestHandler):
                 template_value['is_owned'] = data['is_owned']
                 template_value['is_subed'] = data['is_subed']
                 template_value['house_info'] = data['house_info']
+                template_value['issearch'] = False
+
+            query = self.request.get("query")
+            if query:
+                template_value['issearch'] = True
+                template_value['query'] = query
+                data = self.search_rpc(name, query)
+                if data:
+                    template_value['cards'] = data['search_card_list']
 
             data = self.issue_rpc(name)
             if data:
@@ -48,6 +57,20 @@ class HousePage(webapp2.RequestHandler):
             'house_name': house_name
         }
         url = cfg.SERVICE_URL + "/service-viewsinglehouse?" + urllib.urlencode(request)
+        print url
+        urlfetch.make_fetch_call(rpc, url)
+        response = rpc.get_result()
+        data = json.loads(response.content)
+        return data
+
+
+    def search_rpc(self, name, query):
+        rpc = urlfetch.create_rpc()
+        request = {
+            'search_string': query,
+            'house_name': name
+        }
+        url = cfg.SERVICE_URL + "/service-searchcard?" + urllib.urlencode(request)
         print url
         urlfetch.make_fetch_call(rpc, url)
         response = rpc.get_result()

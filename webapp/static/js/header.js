@@ -17,3 +17,11 @@ $(document)
         // ;
     })
 ;
+
+$(document)
+    .ready(function () {
+        $('.ui.search')
+            .search()
+        ;
+    })
+;
