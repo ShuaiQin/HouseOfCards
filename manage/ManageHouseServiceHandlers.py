@@ -59,3 +59,24 @@ class GetPostForUserHandler(webapp2.RequestHandler):
                 'posts': sorted_list
             }
             self.response.write(json.dumps(return_info))
+
+class GetHouseNumberForCato(webapp2.RequestHandler):
+    def get(self):
+        categories_key = [
+            "art", "geo", "his",
+            "lan", "lit", "phi",
+            "the", "ant", "eco",
+            "law", "pol", "psy",
+            "soc", "bio", "che",
+            "ear", "spa", "phy",
+            "com", "mat", "sta",
+            "eng", "hea", "oth"
+        ]
+        res = {}
+        for key in categories_key:
+            res[key] = len(ops.get_category(key))
+
+        return_info = {
+            'Catogory': res
+        }
+        self.response.write(json.dumps(return_info))

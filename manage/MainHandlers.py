@@ -26,6 +26,7 @@ from ManageCardServiceHandlers import RemoveCardServiceHandler
 from ManageHouseServiceHandlers import CreateHouseServiceHandler
 from ManageHouseServiceHandlers import RemoveHouseServiceHandler
 from ManageHouseServiceHandlers import GetPostForUserHandler
+from ManageHouseServiceHandlers import GetHouseNumberForCato
 from ManageSubscriptionServiceHandlers import CreateSubscriptionServiceHandler
 from ManageSubscriptionServiceHandlers import DeleteSubscriptionServiceHandler
 from ManageSubscriptionServiceHandlers import CheckSubscriptionServiceHandler
@@ -102,6 +103,7 @@ service = webapp2.WSGIApplication([
     ('/service-searchhouse',SearchHouseServiceHandler),
     ('/service-searchcard',SearchCardServiceHandler),
     ('/service-getpostforuser', GetPostForUserHandler),
+    ('/service-gethousenumberforCato', GetHouseNumberForCato),
     #
     ('/getmultiplequiz', study.GetMultipleQuizHandler),
     ('/gettruefalsequiz', study.GetTrueFalseQuizHandler),
