@@ -75,5 +75,7 @@ app = webapp2.WSGIApplication([
     ('/resolve-issue/(\w+)/([^/]+)/([^/]+)', IssueResolveHandler, ('name', 'date', 'decision')),
     ('/search', SearchPage),
     ('/delete-house/(\w+)', DeleteHouseHandler, 'name'),
-    ('/add-card/(\w+)', AddCardHandler, 'name')
+    ('/add-card/(\w+)', AddCardHandler, 'name'),
+    ('/sub/(\w+)', SubPage, 'name'),
+    ('/unsub/(\w+)', UnsubPage, 'name')
 ], debug=True)

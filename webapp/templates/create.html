@@ -30,9 +30,9 @@
                         <div class="default text">Select</div>
                         <i class="dropdown icon"></i>
                         <div class="menu">
-                            <div class="item" data-value="fl">Foreign Language</div>
-                            <div class="item" data-value="history">History</div>
-                            <div class="item" data-value="computer">Computer</div>
+                            {% for key,val in categories.items() %}
+                                <div class="item" data-value="{{ key }}">{{ val }}</div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>

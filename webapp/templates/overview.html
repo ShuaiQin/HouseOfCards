@@ -9,3 +9,30 @@
         <a class="header">{{ house }}</a>
     </div>
 </div>
+{% if is_subed %}
+    <div class="ui fluid labeled button">
+        <a class="ui fluid red button" href="/unsub/{{ house }}">
+            <i class="heart icon"></i> Unsubscribe
+        </a>
+        <a class="ui basic red left pointing label">
+            {{ house_info['num_of_subed'] }}
+        </a>
+    </div>
+{% else %}
+    <div class="ui fluid labeled button">
+        <a class="ui fluid basic red button" href="/sub/{{ house }}">
+            <i class="empty heart icon"></i> Subscribe
+        </a>
+        <a class="ui basic red left pointing label">
+            {{ house_info['num_of_subed'] }}
+        </a>
+    </div>
+{% endif %}
+<div class="ui fluid labeled button" style="margin-top: 10px;">
+    <a class="ui fluid basic blue button">
+        <i class="unhide icon"></i> View
+    </a>
+    <a class="ui basic blue left pointing label">
+        {{ house_info['view'] }}
+    </a>
+</div>
