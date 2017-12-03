@@ -50,6 +50,12 @@ class GetPostForUserHandler(webapp2.RequestHandler):
 
         sorted_list = sorted(post_list, key=lambda h: h['date'], reverse=True)
         if len(sorted_list)>5:
-            return sorted_list[0:5]
+            return_info = {
+                'posts': sorted_list[0:5]
+            }
+            self.response.write(json.dumps(return_info))
         else:
-            return sorted_list
+            return_info = {
+                'posts': sorted_list
+            }
+            self.response.write(json.dumps(return_info))
