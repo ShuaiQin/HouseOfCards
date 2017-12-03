@@ -73,5 +73,7 @@ app = webapp2.WSGIApplication([
     ('/create-post/(\w+)', PostFormHandler, 'name'),
     ('/create-issue/(\w+)', IssueFormHandler, 'name'),
     ('/resolve-issue/(\w+)/([^/]+)/([^/]+)', IssueResolveHandler, ('name', 'date', 'decision')),
-    ('/search', SearchPage)
+    ('/search', SearchPage),
+    ('/delete-house/(\w+)', DeleteHouseHandler, 'name'),
+    ('/add-card/(\w+)', AddCardHandler, 'name')
 ], debug=True)
