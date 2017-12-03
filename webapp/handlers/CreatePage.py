@@ -15,6 +15,7 @@ class CreatePage(webapp2.RequestHandler):
             template_value['myself'] = user.email()
             template_value['logout_url'] = cfg.LOG_OUT_URL
             template_value['sign'] = True
+            template_value['categories'] = cfg.categories_dict
 
             template = cfg.JINJA_ENVIRONMENT.get_template("create.html")
             self.response.write(template.render(template_value))

@@ -21,6 +21,7 @@ class ExplorePage(webapp2.RequestHandler):
             template_value['login_url'] = cfg.LOG_IN_URL
             template_value['sign'] = False
         template_value['houses'] = self.rpc()
+        template_value['categories'] = cfg.categories_dict
 
         template = cfg.JINJA_ENVIRONMENT.get_template("explore.html")
         self.response.write(template.render(template_value))
@@ -29,6 +30,7 @@ class ExplorePage(webapp2.RequestHandler):
     def rpc(self):
         rpc = urlfetch.create_rpc()
         url = cfg.SERVICE_URL + "/service-viewallhouses"
+        print url
         urlfetch.make_fetch_call(rpc, url)
         response = rpc.get_result()
         data = json.loads(response.content)

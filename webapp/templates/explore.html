@@ -2,6 +2,13 @@
 <script>
     $("[href='/explore']").addClass('active')
 </script>
+<script>
+    function filterCategory(key) {
+        $(".cat-filter").hide();
+        $(".cat-" + key).show();
+        console.log(".cat-" + key);
+    }
+</script>
 <div class="ui two column centered grid">
     <div class="row"></div>
     <div class="row">
@@ -17,19 +24,26 @@
             <div class="ui secondary menu">
                 <h3 class="item header">Category</h3>
             </div>
+            {% for key,val in categories.items() %}
+                <div class="ui fluid labeled button" onclick="filterCategory('{{ key }}')">
+                    <a class="ui teal basic button" style="text-align: left; margin-top: 3px">
+                        <i class="book icon"></i> {{ val }}
+                    </a>
+                </div>
+            {% endfor %}
         </div>
         <div class="ui ten wide column">
             <div class="ui secondary menu">
                 <h3 class="item header">All House</h3>
                 <div class="right menu">
                     <div class="item">
-                        <a class="ui mini basic button" href="/create">New House</a>
+                        <a class="ui mini teal basic button" href="/create">New House</a>
                     </div>
                 </div>
             </div>
             <div class="ui four cards">
                 {% for house in houses %}
-                    <div class="ui card">
+                    <div class="ui card cat-{{ house['category'] }} cat-filter">
                         <div class="image">
                             <img src="{{ house['cover_url'] }}">
                         </div>

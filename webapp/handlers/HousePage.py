@@ -123,3 +123,37 @@ class HousePage(webapp2.RequestHandler):
             return data["posts"]
         else:
             return None
+
+
+class SubPage(webapp2.RequestHandler):
+    def get(self, name):
+        form_fields = {
+            'house_name': name,
+            'user_id': users.get_current_user().email()
+        }
+
+        form_data = urllib.urlencode(form_fields)
+
+        rpc = urlfetch.create_rpc()
+        url = cfg.SERVICE_URL + "/service-createsubscription?" + form_data
+        print url
+        urlfetch.make_fetch_call(rpc, url)
+        response = rpc.get_result()
+        self.redirect('/house/' + name)
+
+
+class UnsubPage(webapp2.RequestHandler):
+    def get(self, name):
+        form_fields = {
+            'delete_sub_string': name,
+            'user_id': users.get_current_user().email()
+        }
+
+        form_data = urllib.urlencode(form_fields)
+
+        rpc = urlfetch.create_rpc()
+        url = cfg.SERVICE_URL + "/service-deletesubscription?" + form_data
+        print url
+        urlfetch.make_fetch_call(rpc, url)
+        response = rpc.get_result()
+        self.redirect('/house/' + name)
