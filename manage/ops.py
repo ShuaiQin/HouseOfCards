@@ -479,7 +479,7 @@ def get_all_post(house_name):
     post_list = Post.query( Post.house_key==house_key ).fetch()
     post_list = sorted( post_list, key = lambda p: p.number  )
     return map(lambda p: {"user_id": p.pigeon_key.get().pigeon_id, "house_name": p.house_key.get().name,
-                          "number": p.number, "date": p.date_str, "content": p.content  },
+                          "number": p.number, "date": p.date_str, "content": p.content, "avatar": p.pigeon_key.get().avatar  },
                post_list)
 
 
