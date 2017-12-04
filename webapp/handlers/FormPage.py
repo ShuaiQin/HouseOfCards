@@ -138,8 +138,8 @@ class AddCardHandler(webapp2.RequestHandler):
     def post(self, name):
 
         f = self.request.POST.get('upload_csv')
-        print f
-        if f != None:
+        print str(f)
+        if str(f) != "":
             print 1
             csv_reader = csv.reader(f.file)
             for row in csv_reader:
