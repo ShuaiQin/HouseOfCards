@@ -89,29 +89,48 @@ class GetMultipleQuizHandler(webapp2.RequestHandler):
         list_of_random_cards = random.sample(list_of_all_cards, number_of_quiz)
 
         # construct the list of answer
-        list_of_answer = list(list_of_random_cards)
-
-        # construct the list of multiple choice
+        list_of_answer = []
         list_of_question = []
-        for card in list_of_random_cards:
-            # construct a random answer list for future use
-            list_of_all_random_values = random.sample(list_of_all_values, len(list_of_all_values))
-            # construct a single question dict
+        for single_card in list_of_random_cards:
+            single_answer = {}
             single_question = {}
-            # get the key of the single card
-            for key in card:
-                # the choice is a list including 4 answers
-                single_question[key] = []
-                # include the right answer first
-                single_question[key].append(card[key])
-                # append three other values in single_question[key]
+            list_of_all_random_values = random.sample(list_of_all_values, len(list_of_all_values))
+            for key in single_card:
+                single_answer["key"] = key
+                single_answer["value"] = single_card[key]
+                single_question["key"] = key
+                single_question["list_of_possible_answer"] = []
                 count = 0
-                while len(single_question[key]) < 4 and count < len(list_of_all_random_values):
-                    if list_of_all_random_values[count] != card[key]:
-                        single_question[key].append(list_of_all_random_values[count])
+                while len(single_question["list_of_possible_answer"]) < 4 and count < len(list_of_all_random_values):
+                    if list_of_all_random_values[count] != single_card[key]:
+                        single_question["list_of_possible_answer"].append(list_of_all_random_values[count])
                     count = count + 1
-                single_question[key] = random.sample(single_question[key], len(single_question[key]))
+                single_question["list_of_possible_answer"] = random.sample(
+                    single_question["list_of_possible_answer"], len(single_question["list_of_possible_answer"]))
             list_of_question.append(single_question)
+            list_of_answer.append(single_answer)
+
+        # # construct the list of multiple choice
+        # list_of_question = []
+        # for card in list_of_random_cards:
+        #     # construct a random answer list for future use
+        #     list_of_all_random_values = random.sample(list_of_all_values, len(list_of_all_values))
+        #     # construct a single question dict
+        #     single_question = {}
+        #     # get the key of the single card
+        #     for key in card:
+        #         # the choice is a list including 4 answers
+        #         single_question[key] = []
+        #         # include the right answer first
+        #         single_question[key].append(card[key])
+        #         # append three other values in single_question[key]
+        #         count = 0
+        #         while len(single_question[key]) < 4 and count < len(list_of_all_random_values):
+        #             if list_of_all_random_values[count] != card[key]:
+        #                 single_question[key].append(list_of_all_random_values[count])
+        #             count = count + 1
+        #         single_question[key] = random.sample(single_question[key], len(single_question[key]))
+        #     list_of_question.append(single_question)
 
         return_info = {
             'list_of_question': list_of_question,
@@ -152,19 +171,37 @@ class GetTrueFalseQuizHandler(webapp2.RequestHandler):
         list_of_random_cards = random.sample(list_of_all_cards, number_of_quiz)
 
         # construct the list of answer
-        list_of_answer = list(list_of_random_cards)
-
+        list_of_answer = []
         list_of_question = []
         for single_card in list_of_random_cards:
-            # construct a single question with only one true or false answer
+            single_answer = {}
             single_question = {}
-            # this list should have only two values, true value and false value
             list_of_possible_answer = []
             for key in single_card:
+                single_answer["key"] = key
+                single_answer["value"] = single_card[key]
+
                 list_of_possible_answer.append(single_card[key])
                 list_of_possible_answer.append(random.choice(list_of_all_values))
-                single_question[key] = str(random.choice(list_of_possible_answer))
+                # single_question[key] = str(random.choice(list_of_possible_answer))
+
+                single_question["key"] = key
+                single_question["possible_answer"] = str(random.choice(list_of_possible_answer))
+
+            list_of_answer.append(single_answer)
             list_of_question.append(single_question)
+
+        # list_of_question = []
+        # for single_card in list_of_random_cards:
+        #     # construct a single question with only one true or false answer
+        #     single_question = {}
+        #     # this list should have only two values, true value and false value
+        #     list_of_possible_answer = []
+        #     for key in single_card:
+        #         list_of_possible_answer.append(single_card[key])
+        #         list_of_possible_answer.append(random.choice(list_of_all_values))
+        #         single_question[key] = str(random.choice(list_of_possible_answer))
+        #     list_of_question.append(single_question)
 
         return_info = {
             'list_of_question': list_of_question,
@@ -362,8 +399,12 @@ class GetTodayTaskHandler(webapp2.RequestHandler):
         # construct a list of feed cards
         list_of_feed_cards = []
         for index in list_of_feed:
+            single_card = {}
+            for key in list_of_all_cards[index]:
+                single_card["key"] = key
+                single_card["value"] = list_of_all_cards[index][key]
             # [{Key: Value}, {Key: Value}, ..., {Key: Value}]
-            list_of_feed_cards.append(list_of_all_cards[index])
+            list_of_feed_cards.append(single_card)
 
         # [{Key: Value}, {Key: Value}, ..., {Key: Value}]
         return_info = {
@@ -380,6 +421,13 @@ class SetScheduleHandler(webapp2.RequestHandler):
         house_id = self.request.get('house_id')
         num_per_day = int(self.request.get('num_per_day'))
         ops.set_schedule(pigeon_id, house_id, num_per_day)
+        
+        return_info = {
+            'status': True
+        }
+
+        self.response.content_type = 'text/html'
+        self.response.write(json.dumps(return_info))
 
 
 class CheckScheduleFinishHandler(webapp2.RequestHandler):
