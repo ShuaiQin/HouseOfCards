@@ -18,6 +18,7 @@
 from google.appengine.api import users
 
 import config.config as cfg
+import urllib
 
 from handlers.LoginPage import *
 from handlers.ExplorePage import *
@@ -41,6 +42,8 @@ class MainHandler(webapp2.RequestHandler):
             data = self.rpc(user.email())
             template_value['owned_houses'] = data['owned_house_list'][:4]
             template_value['subed_houses'] = data['subed_house_list'][:4]
+            data = self.news_rpc(user.email())
+            template_value['posts'] = data['posts']
 
         else:
             template_value['login_url'] = cfg.LOG_IN_URL
@@ -60,11 +63,23 @@ class MainHandler(webapp2.RequestHandler):
         data = json.loads(response.content)
         return data
 
+    def news_rpc(self, user_id):
+        rpc = urlfetch.create_rpc()
+        request = {}
+        request['user_id'] = user_id
+        url = cfg.SERVICE_URL + "/service-getpostforuser?" + urllib.urlencode(request)
+        print url
+        urlfetch.make_fetch_call(rpc, url)
+        response = rpc.get_result()
+        data = json.loads(response.content)
+        return data
+
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
     ('/login', LoginPage),
     ('/explore', ExplorePage),
     ('/study', StudyPage),
+    ('/study/(\w+)', QuizPage, 'name'),
     ('/pigeon/(\w+)', PigeonPage, 'id'),
     ('/house/(\w+)', HousePage, 'name'),
     ('/create', CreatePage),
