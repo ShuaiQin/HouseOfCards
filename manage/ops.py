@@ -86,6 +86,8 @@ def delete_subscription(pigeon_id, house_name):
     pigeon_key = ndb.Key(Pigeon, pigeon_id)
     house_list = House.query(House.name==house_name).fetch()
     house = house_list[0]
+    house.num_of_subed = house.num_of_subed -1
+    house.put()
     house_key = house.key
     sublist = Subscription.query( Subscription.pigeon_key==pigeon_key,Subscription.house_key==house_key ).fetch()
     if sublist:
