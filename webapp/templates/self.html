@@ -3,7 +3,7 @@
     <div class="row">
         <div class="thirteen wide column">
             <h2 class="header">
-                Hi test,
+                Hi {{ myself }},
             </h2>
         </div>
     </div>
@@ -35,25 +35,24 @@
             <div class="ui secondary menu">
                 <h3 class="item header">News</h3>
             </div>
-            <div class="ui small comments">
-                <div class="comment">
-                    <a class="avatar">
-                        <img src="/static/pigeon.png">
-                    </a>
-                    <div class="content">
-                        <a class="author">Pigeon 1</a>
-                        <div class="metadata">
-                            <span class="date">Today at 5:42PM</span>
-                        </div>
-                        <div class="text">
-                            How artistic!
-                        </div>
-                        <div class="actions">
-                            <a class="reply">Reply</a>
+            {% for post in posts %}
+                <div class="ui small comments">
+                    <div class="comment">
+                        <a class="avatar">
+                            <img src="/static/{{ post['avatar'] }}">
+                        </a>
+                        <div class="content">
+                            <a class="author">{{ post['user_id'] }}</a>
+                            <div class="metadata">
+                                {{ post['date'] }}
+                            </div>
+                            <div class="text">
+                                {{ post['content'] }}
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            {% endfor %}
         </div>
         <div class="nine wide column">
             <div class="ui secondary menu">

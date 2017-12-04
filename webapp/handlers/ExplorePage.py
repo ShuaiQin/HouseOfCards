@@ -31,7 +31,7 @@ class ExplorePage(webapp2.RequestHandler):
             template_value['houses'] = random.sample(tmp, len(tmp))
 
         cat_count = self.cat_rpc()
-        sort_cat_list = sorted(cat_count.items(), key=lambda x: -x[1])
+        sort_cat_list = sorted(cat_count.items(), key=lambda x: (-x[1], x[0]))
         template_value['categories_order'] = sort_cat_list
         template_value['categories'] = cfg.categories_dict
         template_value['sort_method'] = sort_method

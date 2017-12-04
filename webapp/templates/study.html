@@ -2,4 +2,49 @@
 <script>
     $("[href='/study']").addClass('active')
 </script>
+<div class="ui two column centered grid">
+    <div class="row"></div>
+    <div class="row">
+        <div class="three wide column">
+            <h1 class="header">
+                It's time for Quiz!
+            </h1>
+        </div>
+        <div class="ten wide column">
+        </div>
+    </div>
+    <div class="row">
+        <div class="three wide column">
+        </div>
+        <div class="ten wide column">
+        </div>
+    </div>
+    <div class="three wide column">
+        <div class="ui secondary menu">
+            <h3 class="item header">Select a house</h3>
+        </div>
+        {% if subed_houses %}
+            {% for house in subed_houses %}
+                <div class="ui link fluid card">
+                    <div class="image">
+                        <img src="{{ house['cover_url'] }}">
+                    </div>
+                    <div class="content">
+                        <a class="header">{{ house['house_name'] }}</a>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="ui link fluid card">
+                <div class="image">
+                    <img src="/static/b.png">
+                </div>
+                <div class="content">
+                    <a class="header">Go to learn something!</a>
+                </div>
+            </div
+        {% endif %}
+        <div class="ten wide column">
+        </div>
+    </div>
 {% include 'footer.html' %}
