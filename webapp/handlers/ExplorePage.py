@@ -4,7 +4,7 @@ import webapp2
 
 import config.config as cfg
 
-import json
+import json, random
 
 
 class ExplorePage(webapp2.RequestHandler):
@@ -21,7 +21,20 @@ class ExplorePage(webapp2.RequestHandler):
             template_value['login_url'] = cfg.LOG_IN_URL
             template_value['sign'] = False
         template_value['houses'] = self.rpc()
+        sort_method = self.request.get('sort-method')
+        if sort_method == 'sort-view':
+            template_value['houses'].sort(key=lambda d: -d['view'])
+        elif sort_method == 'sort-sub':
+            template_value['houses'].sort(key=lambda d: -d['num_of_subed'])
+        else:
+            tmp = template_value['houses']
+            template_value['houses'] = random.sample(tmp, len(tmp))
+
+        cat_count = self.cat_rpc()
+        sort_cat_list = sorted(cat_count.items(), key=lambda x: -x[1])
+        template_value['categories_order'] = sort_cat_list
         template_value['categories'] = cfg.categories_dict
+        template_value['sort_method'] = sort_method
 
         template = cfg.JINJA_ENVIRONMENT.get_template("explore.html")
         self.response.write(template.render(template_value))
@@ -35,3 +48,12 @@ class ExplorePage(webapp2.RequestHandler):
         response = rpc.get_result()
         data = json.loads(response.content)
         return data["all_house_list"]
+
+    def cat_rpc(self):
+        rpc = urlfetch.create_rpc()
+        url = cfg.SERVICE_URL + "/service-gethousenumberforCato"
+        print url
+        urlfetch.make_fetch_call(rpc, url)
+        response = rpc.get_result()
+        data = json.loads(response.content)
+        return data['Catogory']

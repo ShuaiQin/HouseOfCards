@@ -3,10 +3,19 @@
     $("[href='/explore']").addClass('active')
 </script>
 <script>
-    function filterCategory(key) {
+    function filterCategory(key, val) {
+        $(".cat-btn").addClass("basic");
+        $(".cat-" + key + "-btn").removeClass("basic");
         $(".cat-filter").hide();
         $(".cat-" + key).show();
+        $(".cat-filter-btn").show().html("<i class='remove icon'></i>" + val);
         console.log(".cat-" + key);
+    }
+
+    function filterButton() {
+        $(".cat-btn").addClass("basic");
+        $(".cat-filter").show();
+        $(".cat-filter-btn").hide();
     }
 </script>
 <div class="ui two column centered grid">
@@ -24,10 +33,15 @@
             <div class="ui secondary menu">
                 <h3 class="item header">Category</h3>
             </div>
-            {% for key,val in categories.items() %}
-                <div class="ui fluid labeled button" onclick="filterCategory('{{ key }}')">
-                    <a class="ui teal basic button" style="text-align: left; margin-top: 3px">
-                        <i class="book icon"></i> {{ val }}
+            {% for key, val in categories_order %}
+                <div class="ui fluid labeled button"
+                     onclick="filterCategory('{{ key }}', '{{ categories[key] }}')"
+                     style="text-align: left; margin-top: 3px">
+                    <a class="ui teal basic button cat-{{ key }}-btn cat-btn">
+                        <i class="book icon"></i> {{ categories[key] }}
+                    </a>
+                    <a class="ui basic teal left pointing label">
+                        {{ val }}
                     </a>
                 </div>
             {% endfor %}
@@ -37,7 +51,33 @@
                 <h3 class="item header">All House</h3>
                 <div class="right menu">
                     <div class="item">
+                        <a class="ui mini teal basic button cat-filter-btn"
+                           onclick="filterButton()" style="display: none;">
+                        </a>
+                    </div>
+                    <div class="item">
                         <a class="ui mini teal basic button" href="/create">New House</a>
+                    </div>
+                    <div class="item">
+                        <form class="ui form" method="get" action="/explore">
+                            <div class="field">
+                                <select class="ui dropdown" name="sort-method" onchange="submit()">
+                                    {% if not sort_method or sort_method == 'sort-no' %}
+                                        <option value="sort-no">Sort by</option>
+                                        <option value="sort-sub">Most Subscription</option>
+                                        <option value="sort-view">Most view</option>
+                                    {% elif sort_method == "sort-sub" %}
+                                        <option value="sort-sub">Most Subscription</option>
+                                        <option value="sort-view">Most view</option>
+                                        <option value="sort-no">Lucky</option>
+                                    {% elif sort_method == "sort-view" %}
+                                        <option value="sort-view">Most view</option>
+                                        <option value="sort-sub">Most Subscription</option>
+                                        <option value="sort-no">Lucky</option>
+                                    {% endif %}
+                                </select>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -48,7 +88,9 @@
                             <img src="{{ house['cover_url'] }}">
                         </div>
                         <div class="content">
-                            <a class="header" href="/house/{{ house['house_name'] }}">{{ house['house_name'] }}</a>
+                            <a class="header" href="/house/{{ house['house_name'] }}">
+                                {{ house['house_name'] }}
+                            </a>
                         </div>
                     </div>
                 {% endfor %}
