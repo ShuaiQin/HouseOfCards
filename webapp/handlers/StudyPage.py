@@ -9,8 +9,6 @@ import random
 
 
 class QuizPage(webapp2.RequestHandler):
-    def post(self):
-        pass
 
     def get(self, name):
 
@@ -33,6 +31,32 @@ class QuizPage(webapp2.RequestHandler):
 
             size = self.size_rpc(name)
             data = self.tf_rpc(name, min(size, 5))
+            template_value['questions'] = dict(
+                map(
+                    lambda d: (d["key"], d["possible_answer"]),
+                    data['list_of_question']
+                )
+            )
+            template_value['answer'] = dict(
+                map(
+                    lambda d: (d["key"], d["value"]),
+                    data['list_of_answer']
+                )
+            )
+
+            data = self.mc_rpc(name, min(size, 5))
+            template_value['m_answer'] = dict(
+                map(
+                    lambda d: (d["key"], d["value"]),
+                    data['list_of_answer']
+                )
+            )
+            template_value['m_questions'] = dict(
+                map(
+                    lambda d: (d["key"], d["list_of_possible_answer"]),
+                    data['list_of_question']
+                )
+            )
 
             template = cfg.JINJA_ENVIRONMENT.get_template("study.html")
             self.response.write(template.render(template_value))
@@ -57,6 +81,19 @@ class QuizPage(webapp2.RequestHandler):
             'house_id': name
         }
         url = cfg.SERVICE_URL + "/gettruefalsequiz?" + urllib.urlencode(request)
+        print url
+        urlfetch.make_fetch_call(rpc, url)
+        response = rpc.get_result()
+        data = json.loads(response.content)
+        return data
+
+    def mc_rpc(self, name, num):
+        rpc = urlfetch.create_rpc()
+        request = {
+            'number_of_quiz': num,
+            'house_id': name
+        }
+        url = cfg.SERVICE_URL + "/getmultiplequiz?" + urllib.urlencode(request)
         print url
         urlfetch.make_fetch_call(rpc, url)
         response = rpc.get_result()

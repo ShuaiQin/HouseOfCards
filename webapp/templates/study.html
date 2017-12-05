@@ -1,6 +1,52 @@
 {% include 'header.html' %}
 <script>
-    $("[href='/study']").addClass('active')
+    $("[href='/study']").addClass('active');
+    {#    $(document).ready(function () {#}
+    {#        $('.ui.radio.checkbox').checkbox();#}
+    {#    });#}
+    var js_dict = {
+        {% for k, v in answer.items() %}
+            "{{ k }}": "{{ v }}"{% if not loop.last %},{% endif %}
+        {% endfor %}
+    };
+    console.log(js_dict);
+
+    function al() {
+        alert("hello");
+    }
+
+    function checkRadioTrue(key, val) {
+        var r = $(".q-t." + key);
+        r.parent().parent().parent().find("i").remove();
+        console.log(key, val, js_dict[key]);
+        if (val === js_dict[key]) {
+            r.siblings().append(' <i class="teal checkmark icon"></i>');
+        } else {
+            r.siblings().append(' <i class="red remove icon"></i>');
+        }
+    }
+
+    function checkRadioFalse(key, val) {
+        var r = $(".q-f." + key);
+        r.parent().parent().parent().find("i").remove();
+        console.log(key, val, js_dict[key]);
+        if (val !== js_dict[key]) {
+            r.siblings().append(' <i class="teal checkmark icon"></i>');
+        } else {
+            r.siblings().append(' <i class="red remove icon"></i>');
+        }
+    }
+
+    function checkRadioMultiple(key, val, idx) {
+        var r = $(".q-" + idx + "." + key);
+        r.parent().parent().parent().find("i").remove();
+        console.log(key, val, js_dict[key]);
+        if (val === js_dict[key]) {
+            r.siblings().append(' <i class="teal checkmark icon"></i>');
+        } else {
+            r.siblings().append(' <i class="red remove icon"></i>');
+        }
+    }
 </script>
 <div class="ui two column centered grid">
     <div class="row"></div>
@@ -23,28 +69,71 @@
         <div class="ui secondary menu">
             <h3 class="item header">Select a house</h3>
         </div>
-        {% if subed_houses %}
-            {% for house in subed_houses %}
-                <div class="ui link fluid card">
-                    <div class="image">
-                        <img src="{{ house['cover_url'] }}">
-                    </div>
-                    <div class="content">
-                        <a class="header">{{ house['house_name'] }}</a>
-                    </div>
-                </div>
-            {% endfor %}
-        {% else %}
-            <div class="ui link fluid card">
+        <div class="ui link fluid card">
+            <div class="image">
+                <img src="{{ quiz_house['cover_url'] }}">
+            </div>
+            <div class="content">
+                <a class="header">{{ quiz_house['house_name'] }}</a>
+            </div>
+        </div>
+        {% for house in subed_houses %}
+            <a class="ui fluid card" href="/study/{{ house['house_name'] }}">
                 <div class="image">
-                    <img src="/static/b.png">
+                    <img src="{{ house['cover_url'] }}">
                 </div>
                 <div class="content">
-                    <a class="header">Go to learn something!</a>
+                    <div class="header" href="/study/{{ house['house_name'] }}">{{ house['house_name'] }}</div>
                 </div>
-            </div
-        {% endif %}
-        <div class="ten wide column">
+            </a>
+        {% endfor %}
+    </div>
+    <div class="ten wide column">
+        <div class="ui secondary menu">
+            <h3 class="item header">Try this quiz :D</h3>
+        </div>
+        <div class="ui segment" style="width: 97%; margin-left: 1.5%">
+            <form class="ui form">
+                {% for key,val in questions.items() %}
+                    <div class="grouped fields">
+                        <label for="q-{{ key }}">Q{{ loop.index }}: {{ key }}: {{ val }}</label>
+                        <div class="ui field">
+                            <div class="ui radio checkbox">
+                                <input type="radio" name="q-{{ key }}" class="q-t {{ key }}"
+                                       onclick="checkRadioTrue('{{ key }}', '{{ val }}');">
+                                <label>True</label>
+                            </div>
+                        </div>
+                        <div class="ui field">
+                            <div class="ui radio checkbox">
+                                <input type="radio" name="q-{{ key }}" class="q-f {{ key }}"
+                                       onclick="checkRadioFalse('{{ key }}', '{{ val }}');">
+                                <label>False</label>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </form>
+        <div class="ui divider"></div>
+            <form class="ui form">
+                {% for key,val in m_questions.items() %}
+                    <div class="grouped fields">
+                        <label for="q-{{ key }}">Q{{ loop.index }}: {{ key }}:</label>
+                        {% for pa in val %}
+                            <div class="ui field">
+                                <div class="ui radio checkbox">
+                                    <input type="radio"
+                                           name="q-{{ key }}"
+                                           class="q-{{ loop.index }} {{ key }}"
+                                           onclick="checkRadioMultiple('{{ key }}', '{{ pa }}', '{{ loop.index }}');">
+                                    <label>{{ pa }}</label>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </form>
         </div>
     </div>
+</div>
 {% include 'footer.html' %}
