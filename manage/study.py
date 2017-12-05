@@ -100,6 +100,8 @@ class GetMultipleQuizHandler(webapp2.RequestHandler):
                 single_answer["value"] = single_card[key]
                 single_question["key"] = key
                 single_question["list_of_possible_answer"] = []
+                # including the right answer first
+                single_question["list_of_possible_answer"].append(single_card[key])
                 count = 0
                 while len(single_question["list_of_possible_answer"]) < 4 and count < len(list_of_all_random_values):
                     if list_of_all_random_values[count] != single_card[key]:
