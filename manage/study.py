@@ -109,6 +109,7 @@ class GetMultipleQuizHandler(webapp2.RequestHandler):
                     count = count + 1
                 single_question["list_of_possible_answer"] = random.sample(
                     single_question["list_of_possible_answer"], len(single_question["list_of_possible_answer"]))
+                single_question["answer"] = single_question["list_of_possible_answer"].index(single_card[key])
             list_of_question.append(single_question)
             list_of_answer.append(single_answer)
 
@@ -135,8 +136,8 @@ class GetMultipleQuizHandler(webapp2.RequestHandler):
         #     list_of_question.append(single_question)
 
         return_info = {
-            'list_of_question': list_of_question,
-            'list_of_answer': list_of_answer
+            'list_of_question': list_of_question
+            # 'list_of_answer': list_of_answer
         }
         self.response.content_type = 'text/html'
         self.response.write(json.dumps(return_info))
@@ -190,6 +191,11 @@ class GetTrueFalseQuizHandler(webapp2.RequestHandler):
                 single_question["key"] = key
                 single_question["possible_answer"] = str(random.choice(list_of_possible_answer))
 
+                if single_question["possible_answer"] == single_card[key]:
+                    single_question["answer"] = "T"
+                else:
+                    single_question["answer"] = "F"
+
             list_of_answer.append(single_answer)
             list_of_question.append(single_question)
 
@@ -206,8 +212,8 @@ class GetTrueFalseQuizHandler(webapp2.RequestHandler):
         #     list_of_question.append(single_question)
 
         return_info = {
-            'list_of_question': list_of_question,
-            'list_of_answer': list_of_answer
+            'list_of_question': list_of_question
+            # 'list_of_answer': list_of_answer
         }
         self.response.content_type = 'text/html'
         self.response.write(json.dumps(return_info))
