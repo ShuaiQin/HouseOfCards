@@ -37,11 +37,17 @@
         }
     }
 
+    var js_dict_m = {
+        {% for k, v in m_answer.items() %}
+            "{{ k }}": "{{ v }}"{% if not loop.last %},{% endif %}
+        {% endfor %}
+    };
+
     function checkRadioMultiple(key, val, idx) {
         var r = $(".q-" + idx + "." + key);
         r.parent().parent().parent().find("i").remove();
-        console.log(key, val, js_dict[key]);
-        if (val === js_dict[key]) {
+        console.log(idx, key, val, js_dict_m[key]);
+        if (val === js_dict_m[key]) {
             r.siblings().append(' <i class="teal checkmark icon"></i>');
         } else {
             r.siblings().append(' <i class="red remove icon"></i>');
