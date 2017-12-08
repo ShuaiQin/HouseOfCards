@@ -4,7 +4,7 @@ import webapp2
 
 import config.config as cfg
 
-import json, csv
+import json, csv, re
 import urllib
 
 
@@ -146,6 +146,7 @@ class AddCardHandler(webapp2.RequestHandler):
                 self.uploadCard(name, row[0], row[1])
         else:
             key = self.request.get('card_key')
+            key = re.sub('[^a-zA-Z0-9]+', '-', key)
             content = self.request.get('content')
             if key and content:
                 self.uploadCard(name, key, content)

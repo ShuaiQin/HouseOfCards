@@ -5,49 +5,36 @@
     {#        $('.ui.radio.checkbox').checkbox();#}
     {#    });#}
     var js_dict = {
-        {% for k, v in answer.items() %}
-            "{{ k }}": "{{ v }}"{% if not loop.last %},{% endif %}
+        {% for q in questions %}
+            "{{ q['key'] }}": "{{ q['answer'] }}"{% if not loop.last %},{% endif %}
         {% endfor %}
     };
     console.log(js_dict);
 
-    function al() {
-        alert("hello");
-    }
-
-    function checkRadioTrue(key, val) {
+    function checkTrueOrFalseRadio(key, tf) {
         var r = $(".q-t." + key);
-        r.parent().parent().parent().find("i").remove();
-        console.log(key, val, js_dict[key]);
-        if (val === js_dict[key]) {
-            r.siblings().append(' <i class="teal checkmark icon"></i>');
+        r.find("i").remove();
+        console.log(key, tf, js_dict[key]);
+        if (tf === js_dict[key]) {
+            r.children('label').append(' <i class="green checkmark icon"></i>');
         } else {
-            r.siblings().append(' <i class="red remove icon"></i>');
-        }
-    }
-
-    function checkRadioFalse(key, val) {
-        var r = $(".q-f." + key);
-        r.parent().parent().parent().find("i").remove();
-        console.log(key, val, js_dict[key]);
-        if (val !== js_dict[key]) {
-            r.siblings().append(' <i class="teal checkmark icon"></i>');
-        } else {
-            r.siblings().append(' <i class="red remove icon"></i>');
+            r.children('label').append(' <i class="red remove icon"></i>');
         }
     }
 
     var js_dict_m = {
-        {% for k, v in m_answer.items() %}
-            "{{ k }}": "{{ v }}"{% if not loop.last %},{% endif %}
+        {% for q in m_questions %}
+            "{{ q['key'] }}": "{{ q['answer'] }}"{% if not loop.last %},{% endif %}
         {% endfor %}
     };
 
-    function checkRadioMultiple(key, val, idx) {
+    console.log(js_dict_m);
+
+    function checkRadioMultiple(key, idx) {
         var r = $(".q-" + idx + "." + key);
         r.parent().parent().parent().find("i").remove();
-        console.log(idx, key, val, js_dict_m[key]);
-        if (val === js_dict_m[key]) {
+        console.log(idx, key, js_dict_m[key]);
+        if (idx === js_dict_m[key]) {
             r.siblings().append(' <i class="teal checkmark icon"></i>');
         } else {
             r.siblings().append(' <i class="red remove icon"></i>');
@@ -100,38 +87,40 @@
         </div>
         <div class="ui segment" style="width: 97%; margin-left: 1.5%">
             <form class="ui form">
-                {% for key,val in questions.items() %}
-                    <div class="grouped fields">
-                        <label for="q-{{ key }}">Q{{ loop.index }}: {{ key }}: {{ val }}</label>
+                {% for q in questions %}
+                    <div class="grouped fields q-t {{ q['key'] }}">
+                        <label for="q-{{ q['key'] }}">
+                            Q{{ loop.index }}: {{ q['key'] }}: {{ q['possible_answer'] }}
+                        </label>
                         <div class="ui field">
                             <div class="ui radio checkbox">
-                                <input type="radio" name="q-{{ key }}" class="q-t {{ key }}"
-                                       onclick="checkRadioTrue('{{ key }}', '{{ val }}');">
+                                <input type="radio" name="q-{{ q['key'] }}"
+                                       onclick="checkTrueOrFalseRadio('{{ q['key'] }}', 'T');">
                                 <label>True</label>
                             </div>
                         </div>
                         <div class="ui field">
                             <div class="ui radio checkbox">
-                                <input type="radio" name="q-{{ key }}" class="q-f {{ key }}"
-                                       onclick="checkRadioFalse('{{ key }}', '{{ val }}');">
+                                <input type="radio" name="q-{{ q['key'] }}"
+                                       onclick="checkTrueOrFalseRadio('{{ q['key'] }}', 'F');">
                                 <label>False</label>
                             </div>
                         </div>
                     </div>
                 {% endfor %}
             </form>
-        <div class="ui divider"></div>
+            <div class="ui divider"></div>
             <form class="ui form">
-                {% for key,val in m_questions.items() %}
+                {% for q in m_questions %}
                     <div class="grouped fields">
-                        <label for="q-{{ key }}">Q{{ loop.index }}: {{ key }}:</label>
-                        {% for pa in val %}
+                        <label for="q-{{ q['key'] }}">Q{{ loop.index }}: {{ q['key'] }}:</label>
+                        {% for pa in q['list_of_possible_answer'] %}
                             <div class="ui field">
                                 <div class="ui radio checkbox">
                                     <input type="radio"
-                                           name="q-{{ key }}"
-                                           class="q-{{ loop.index }} {{ key }}"
-                                           onclick="checkRadioMultiple('{{ key }}', '{{ pa }}', '{{ loop.index }}');">
+                                           name="q-{{ q['key'] }}"
+                                           class="q-{{ loop.index }} {{ q['key'] }}"
+                                           onclick="checkRadioMultiple('{{ q['key'] }}', '{{ loop.index }}');">
                                     <label>{{ pa }}</label>
                                 </div>
                             </div>
