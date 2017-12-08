@@ -1,4 +1,4 @@
-#this file include handlers that manage subscriptions
+# this file include handlers that manage subscriptions
 
 import webapp2
 import ops
@@ -11,6 +11,12 @@ class CreateSubscriptionServiceHandler(webapp2.RequestHandler):
         house_name = self.request.get('house_name')
         if not ops.is_subscribed(house_name, user_id):
             ops.create_subscription(user_id, house_name)
+        # add a return method
+        return_info = {
+            'status': True
+        }
+        self.response.content_type = 'text/html'
+        self.response.write(json.dumps(return_info))
 
 
 class DeleteSubscriptionServiceHandler(webapp2.RequestHandler):
@@ -21,6 +27,12 @@ class DeleteSubscriptionServiceHandler(webapp2.RequestHandler):
         for house in delete_sub_list:
             if ops.is_subscribed(house, user_id):
                 ops.delete_subscription(user_id, str(house))
+        # add a return method
+        return_info = {
+            'status': True
+        }
+        self.response.content_type = 'text/html'
+        self.response.write(json.dumps(return_info))
 
 
 class CheckSubscriptionServiceHandler(webapp2.RequestHandler):
