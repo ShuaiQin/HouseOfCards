@@ -19,23 +19,19 @@
     <div class="ui eleven wide column">
         <form class="ui form" method="post" action="/create">
             <div class="two fields">
-                <div class="required field">
+                <div class="field">
                     <label>House Name</label>
                     <input type="text" name="name" placeholder="House Name (only letters and numbers)"
                            required pattern="[A-z|0-9]+">
                 </div>
                 <div class="required field">
                     <label>Category</label>
-                    <div class="ui selection dropdown">
-                        <input type="hidden" name="category" required>
-                        <div class="default text">Select</div>
-                        <i class="dropdown icon"></i>
-                        <div class="menu">
-                            {% for key,val in categories.items() %}
-                                <div class="item" data-value="{{ key }}">{{ val }}</div>
-                            {% endfor %}
-                        </div>
-                    </div>
+                    <select class="ui selection dropdown" name="category" required>
+                        <option class="item" value="">Select a Category</option>
+                        {% for key,val in categories.items() %}
+                            <option class="item" value="{{ key }}">{{ val }}</option>
+                        {% endfor %}
+                    </select>
                 </div>
             </div>
             <div class="field">
