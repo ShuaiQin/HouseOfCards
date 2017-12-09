@@ -113,14 +113,14 @@
             <form class="ui form">
                 {% for q in m_questions %}
                     <div class="grouped fields">
-                        <label for="q-{{ q['key'] }}">Q{{ loop.index }}: {{ q['key'] }}:</label>
+                        <label for="q-{{ q['key'] }}">Q{{ loop.index0 }}: {{ q['key'] }}:</label>
                         {% for pa in q['list_of_possible_answer'] %}
                             <div class="ui field">
                                 <div class="ui radio checkbox">
                                     <input type="radio"
                                            name="q-{{ q['key'] }}"
                                            class="q-{{ loop.index }} {{ q['key'] }}"
-                                           onclick="checkRadioMultiple('{{ q['key'] }}', '{{ loop.index }}');">
+                                           onclick="checkRadioMultiple('{{ q['key'] }}', '{{ loop.index0 }}');">
                                     <label>{{ pa }}</label>
                                 </div>
                             </div>

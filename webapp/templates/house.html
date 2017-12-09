@@ -30,7 +30,9 @@
                 <a class="item" data-tab="issue">Issue</a>
                 <a class="item" data-tab="pr">Pull Request</a>
                 <a class="item" data-tab="post">Comments</a>
-                <a class="item" data-tab="setting">Setting</a>
+                {% if is_owned %}
+                    <a class="item" data-tab="setting">Setting</a>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -53,9 +55,11 @@
         <!--div class="ui tab" data-tab="insight">
             {% include 'insight.html' %}
         </div-->
-        <div class="ui tab" data-tab="setting">
-            {% include 'setting.html' %}
-        </div>
+        {% if is_owned %}
+            <div class="ui tab" data-tab="setting">
+                {% include 'setting.html' %}
+            </div>
+        {% endif %}
     </div>
     <div class="row"></div>
 </div>　

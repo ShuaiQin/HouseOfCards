@@ -25,3 +25,13 @@ $(document)
         ;
     })
 ;
+
+function enterSameName(event, target) {
+    //alert ("The new content: " + event.target.value);
+    var value = event.target.value;
+    if (value === target) {
+        $(".delete-house-btn").removeClass("disabled")
+    } else {
+        $(".delete-house-btn").addClass("disabled")
+    }
+}

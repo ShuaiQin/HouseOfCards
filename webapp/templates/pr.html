@@ -25,14 +25,42 @@
             .dropdown()
         ;
     });
+
+    function changeFormContent() {
+        var val = $("#pr-mode").val();
+        var card_key_field = $("#pr-card-key");
+        var new_key_field = $("#pr-new-key");
+        var new_content_field = $("#pr-new-content");
+        $(".pr-input").parent().removeClass("disabled");
+        console.log(val);
+        function sameInput() {
+                    card_key_field.val(new_key_field.val());
+                }
+        switch (val) {
+            case "add":
+                card_key_field.parent().addClass("disabled");
+                new_key_field[0].addEventListener("input", sameInput);
+                break;
+            case "remove":
+                new_key_field.parent().addClass("disabled");
+                new_content_field.parent().addClass("disabled");
+                break;
+            case "key":
+                new_content_field.parent().addClass("disabled");
+                break;
+            case "content":
+                new_key_field.parent().addClass("disabled");
+                break;
+        }
+    }
 </script>
 <div class="page-create-form ui segment" style="display: none; width: 97%; margin-left: 1.5%">
     <form class="ui form" method="post" action="/create-pr/{{ house }}">
         <div class="two fields">
             <div class="field">
                 <label>Mode</label>
-                <div class="ui selection dropdown">
-                    <input type="hidden" name="mode">
+                <div class="ui selection dropdown" onchange="changeFormContent()">
+                    <input type="hidden" name="mode" id="pr-mode">
                     <div class="default text">Select a mode</div>
                     <i class="dropdown icon"></i>
                     <div class="menu">
@@ -45,17 +73,17 @@
             </div>
             <div class="field">
                 <label>Card Key</label>
-                <input type="text" name="card_key" placeholder="Card Key">
+                <input type="text" name="card_key" class="pr-input" id="pr-card-key" placeholder="Card Key">
             </div>
         </div>
         <div class="two fields">
             <div class="field">
                 <label>New Key</label>
-                <input type="text" name="new_key" placeholder="New Key">
+                <input type="text" name="new_key" class="pr-input" id="pr-new-key" placeholder="New Key">
             </div>
             <div class="field">
                 <label>New Content</label>
-                <input type="text" name="new_value" placeholder="New Content">
+                <input type="text" name="new_value" class="pr-input" id="pr-new-content" placeholder="New Content">
             </div>
         </div>
         <input class="ui basic teal button" type="submit" value="Create">
