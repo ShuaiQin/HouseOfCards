@@ -18,9 +18,11 @@
                 </form>
             </div>
         {% endif %}
-        <div class="item">
-            <button class="ui mini teal basic button" onclick="showform()">Add Card</button>
-        </div>
+        {% if is_owned %}
+            <div class="item">
+                <button class="ui mini teal basic button" onclick="showform()">Add Card</button>
+            </div>
+        {% endif %}
     </div>
 </div>
 <div class="page-create-form ui segment" style="display: none; width: 97%; margin-left: 1.5%">

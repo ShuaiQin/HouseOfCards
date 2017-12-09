@@ -22,8 +22,8 @@
         </div>
         <div class="extra content" style="display: none">
             <div class="ui input">
-                <input type="text" placeholder="Name">
-                <a class="ui basic red button" href="/delete-house/{{ house }}">Delete</a>
+                <input type="text" placeholder="Name" oninput="enterSameName(event, '{{ house }}')">
+                <a class="ui disabled basic red button delete-house-btn" href="/delete-house/{{ house }}">Delete</a>
             </div>
         </div>
     </div>

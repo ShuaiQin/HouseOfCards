@@ -83,16 +83,17 @@
             </div>
             <div class="ui four cards">
                 {% for house in houses %}
-                    <div class="ui card cat-{{ house['category'] }} cat-filter">
-                        <div class="image">
+                    <a class="ui link card cat-{{ house['category'] }} cat-filter"
+                         href="/house/{{ house['house_name'] }}">
+                        <div class=" image">
                             <img src="{{ house['cover_url'] }}">
                         </div>
                         <div class="content">
-                            <a class="header" href="/house/{{ house['house_name'] }}">
+                            <div class="header">
                                 {{ house['house_name'] }}
-                            </a>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 {% endfor %}
             </div>
         </div>

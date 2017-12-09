@@ -98,12 +98,14 @@ class StudyPage(webapp2.RequestHandler):
         if user:
             data = self.rpc(user.email())
             houses = data['subed_house_list']
-            if not houses:
-                self.redirect('/')
-            idx = random.randint(0, len(houses) - 1)
-            print idx
-            name = houses[idx].get('house_name')
-            self.redirect("/study/" + name)
+            if len(houses) == 0:
+                print "go /"
+                self.redirect('/explore')
+            else:
+                idx = random.randint(0, len(houses) - 1)
+                print idx
+                name = houses[idx].get('house_name')
+                self.redirect("/study/" + name)
         else:
             self.redirect("/login")
 
